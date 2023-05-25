@@ -1,4 +1,5 @@
-import {useState} from 'react'
+import { useState } from 'react'
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const [username, setUsername] = useState('')
@@ -15,7 +16,7 @@ const Navbar = () => {
   const handleLogin = (event) => {
     console.log("submitting")
     event.preventDefault() // prevent page refresh
-    
+
     // get username and password
     console.log(username)
     console.log(password)
@@ -27,8 +28,9 @@ const Navbar = () => {
   }
 
   return (
-    <form onSubmit={handleLogin}>
-       <input
+    <main>
+      <form onSubmit={handleLogin}>
+        <input
           type="text"
           placeholder="Username"
           value={username}
@@ -40,8 +42,12 @@ const Navbar = () => {
           value={password}
           onChange={handlePassword}
         />
-      <button type="submit">Login</button>
-    </form>
+        <button type="submit">Login</button>
+      </form>
+      <h2>Don't have an account? Sign up for one here!</h2>
+      <b></b>
+      <Link to="/signup">Signup!</Link>
+    </main>
   )
 }
 

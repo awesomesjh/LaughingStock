@@ -1,10 +1,14 @@
+import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar'
+import Signup from './components/Signup'
 
-const App = () => (
-  <div>
-    <Navbar/>
-  </div>
-)
-
-export default App
-
+export default function App() {
+  return (
+    <div>
+      <Routes>
+        <Route path="/" element={<Navbar />} />
+        <Route path="signup" element={<Signup />} />
+      </Routes>
+    </div>
+  );
+}
