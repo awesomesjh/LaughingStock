@@ -1,21 +1,10 @@
-<<<<<<< HEAD
-import './App.css';
-import LoginPage from './components/LoginPage'
+import Navbar from './components/Navbar'
 
-export default function App() {
-  return (
-  <div className="App">
-    <LoginPage />
-  </div>
-  );
-}
-
-=======
 const App = () => (
   <div>
-    <p>Hello world</p>
+    <Navbar/>
   </div>
 )
 
 export default App
->>>>>>> 454fec5eee8d386f11474adb0d99da39ed3a250a
+
