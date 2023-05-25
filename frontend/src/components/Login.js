@@ -1,9 +1,13 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'
+import loginService from '../services/login'
+import Notification from './Notification'
 
-const Navbar = () => {
+const Login = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [user, setUser] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   const handleUsername = (event) => {
     setUsername(event.target.value)
@@ -13,17 +17,22 @@ const Navbar = () => {
     setPassword(event.target.value)
   }
 
-  const handleLogin = (event) => {
-    console.log("submitting")
-    event.preventDefault() // prevent page refresh
-
-    // get username and password
-    console.log(username)
-    console.log(password)
-
-    // clear all inputs on the form
-    setUsername('')
-    setPassword('')
+  const handleLogin = async (event) => {
+    event.preventDefault()
+    
+    try {
+      const user = await loginService.login({
+        username, password
+      })
+      setUser(user)
+      setUsername('')
+      setPassword('')
+    } catch (exception) {
+      setErrorMessage('Wrong credentials')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
 
   }
 
@@ -44,6 +53,7 @@ const Navbar = () => {
         />
         <button type="submit">Login</button>
       </form>
+      <Notification message={errorMessage} />
       <h2>Don't have an account? Sign up for one here!</h2>
       <b></b>
       <Link to="/signup">Signup!</Link>
@@ -51,4 +61,4 @@ const Navbar = () => {
   )
 }
 
-export default Navbar
+export default Login

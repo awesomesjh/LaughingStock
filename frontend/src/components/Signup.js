@@ -1,10 +1,13 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'
+import userService from '../services/users'
+import Notification from './Notification'
 
-export default function Signup() {
+const Signup = () => {
 
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
+	const [errorMessage, setErrorMessage] = useState(null)
 
 	const handleUsername = (event) => {
 		setUsername(event.target.value)
@@ -14,23 +17,27 @@ export default function Signup() {
 		setPassword(event.target.value)
 	}
 
-	const handleLogin = (event) => {
-		console.log("submitting")
-		event.preventDefault() // prevent page refresh
+	const handleSignup = async (event) => {
+		event.preventDefault()
 
-		// get username and password
-		console.log(username)
-		console.log(password)
-
-		// clear all inputs on the form
-		setUsername('')
-		setPassword('')
+		try {
+      const user = await userService.create({
+        username, password
+      })
+      setUsername('')
+      setPassword('')
+    } catch (exception) {
+      setErrorMessage('Username has been taken')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
 
 	}
 
 	return (
 		<main>
-			<form onSubmit={handleLogin}>
+			<form onSubmit={handleSignup}>
 				<input
 					type="text"
 					placeholder="Username"
@@ -43,11 +50,14 @@ export default function Signup() {
 					value={password}
 					onChange={handlePassword}
 				/>
-				<button type="submit">Login</button>
+				<button type="submit">Create Account</button>
 			</form>
+			<Notification message={errorMessage} />
 			<h2>Try logging in now!</h2>
 			<b></b>
 			<Link to="/">Login Page</Link>
 		</main>
 	)
 }
+
+export default Signup
