@@ -30,6 +30,7 @@ export default function Signup() {
 
 	return (
 		<main>
+			<h2>Sign up for Laughing Stock here!</h2>
 			<form onSubmit={handleLogin}>
 				<input
 					type="text"
@@ -38,16 +39,16 @@ export default function Signup() {
 					onChange={handleUsername}
 				/>
 				<input
-					type="text"
+					type="password"
 					placeholder="Password"
 					value={password}
 					onChange={handlePassword}
 				/>
 				<button type="submit">Login</button>
-			</form>
+			</form>	
 			<h2>Try logging in now!</h2>
 			<b></b>
-			<Link to="/">Login Page</Link>
+			<Link to="/signin">Login Page</Link>
 		</main>
 	)
 }
