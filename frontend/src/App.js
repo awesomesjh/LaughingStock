@@ -1,6 +1,8 @@
+import Navbar from './components/Navbar'
+
 const App = () => (
   <div>
-    <p>Hello world</p>
+    <Navbar/>
   </div>
 )
 
