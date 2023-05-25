@@ -38,6 +38,7 @@ const Login = () => {
 
   return (
     <main>
+      <h2>Sign in to Laughing Stock!</h2>
       <form onSubmit={handleLogin}>
         <input
           type="text"
@@ -46,7 +47,7 @@ const Login = () => {
           onChange={handleUsername}
         />
         <input
-          type="text"
+          type="password"
           placeholder="Password"
           value={password}
           onChange={handlePassword}
@@ -55,7 +56,6 @@ const Login = () => {
       </form>
       <Notification message={errorMessage} />
       <h2>Don't have an account? Sign up for one here!</h2>
-      <b></b>
       <Link to="/signup">Signup!</Link>
     </main>
   )
