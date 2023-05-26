@@ -24,9 +24,11 @@ const Signup = () => {
       const user = await userService.create({
         username, password
       })
+			console.log(user)
       setUsername('')
       setPassword('')
     } catch (exception) {
+			console.log(exception)
       setErrorMessage('Username has been taken')
       setTimeout(() => {
         setErrorMessage(null)
