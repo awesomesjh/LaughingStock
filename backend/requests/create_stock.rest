@@ -1,0 +1,8 @@
+POST http://localhost:3001/api/stocks
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im51bWJlcnMiLCJpZCI6MSwiaWF0IjoxNjg1MDgxNjU3LCJleHAiOjE2ODUwODUyNTd9.22lDrUMxFsSakJVqGWlmDiqPxYCeEZTNs4sue2TTjOM
+
+{
+  "symbol": "TSLA",
+  "quantity": 10
+}

@@ -1,7 +1,12 @@
+const Stock = require('./stock')
 const User = require('./user')
 
-User.sync()
+User.hasMany(Stock)
+Stock.belongsTo(User)
+
+User.sync({ alter: true })
+Stock.sync({ alter: true })
 
 module.exports = {
-  User
+  Stock, User
 }
