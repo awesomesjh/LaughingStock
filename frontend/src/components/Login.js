@@ -4,12 +4,16 @@ import loginService from '../services/login'
 import Notification from './Notification'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { useNavigate } from 'react-router-dom';
+
+
 
 const Login = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
+  const navigate = useNavigate();
 
   const handleUsername = (event) => {
     setUsername(event.target.value)
@@ -22,6 +26,7 @@ const Login = () => {
   const handleLogin = async (event) => {
     // console.log(username)
     // console.log(password)
+    
     event.preventDefault()
 
     try {
@@ -31,6 +36,8 @@ const Login = () => {
       setUser(user)
       setUsername('')
       setPassword('')
+      navigate('/dashboard');
+
     } catch (exception) {
       setErrorMessage('Wrong credentials')
       setTimeout(() => {
@@ -40,10 +47,12 @@ const Login = () => {
 
   }
 
+ 
+
   return (
     <main>
       <h2>Sign in to Laughing Stock!</h2>
-       
+
       {/* <form onSubmit={handleLogin}>
         <input
           type="text"
@@ -60,7 +69,7 @@ const Login = () => {
         <button type="submit">Login</button>
       </form> */}
 
-      
+
       <Form onSubmit={handleLogin}>
         <Form.Group className="mb-3" controlId="formUsername">
           <Form.Label>Username</Form.Label>
@@ -76,7 +85,6 @@ const Login = () => {
         </Button>
       </Form>
       <Notification message={errorMessage} />
-
       <h2>Don't have an account? Sign up for one here!</h2>
       <Link to="/signup">Signup!</Link>
     </main>
