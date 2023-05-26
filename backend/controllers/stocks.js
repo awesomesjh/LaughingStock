@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken')
 const router = require('express').Router()
 
 const { Stock, User } = require('../models')
@@ -8,10 +9,7 @@ const tokenExtractor = (req, res, next) => {
   const authorization = req.get('authorization')
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     try {
-      console.log(3)
-      console.log(SECRET)
       req.decodedToken = jwt.verify(authorization.substring(7), SECRET)
-      console.log(4)
     } catch {
       return res.status(401).json({ error: 'token invalid' })
     }
