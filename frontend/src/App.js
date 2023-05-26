@@ -3,7 +3,8 @@ import { Routes, Route } from 'react-router-dom';
 import Main from './components/Main'
 import Signup from './components/Signup'
 import Login from './components/Login'
-import User from './components/User'
+import Dashboard from './components/Dashboard';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function App() {
   return (
@@ -12,7 +13,7 @@ export default function App() {
         <Route path="/" element={<Main />} />
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
-        <Route path="user" element={<User />} />
+        <Route path="dashboard" element={<Dashboard />} />
       </Routes>
     </div>
   );

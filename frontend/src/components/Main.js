@@ -7,7 +7,7 @@ export default function Navbar () {
       <h2>Welcome to Laughing Stock!</h2>
       <div><Link to="/signup">Signup!</Link></div>
       <div><Link to="/login">Login</Link></div>
-      <div><Link to="/user">Test only</Link></div>
+      <div><Link to="/dashboard">Test only</Link></div>
     </main>
   )
 }
