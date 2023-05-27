@@ -57,8 +57,6 @@ export default function Dashboard() {
   
   const handleDeleteStock = (stockName) => {
     const newStockslist = stocks.filter( li => li.stock !== stockName)
-    console.log(1)
-    console.log(newStockslist)
     setStocks(newStockslist)
   }
 
