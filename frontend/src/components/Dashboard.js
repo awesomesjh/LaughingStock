@@ -54,6 +54,13 @@ export default function Dashboard() {
     setNewPrice("");
     setNewQuantity("");
   };
+  
+  const handleDeleteStock = (stockName) => {
+    const newStockslist = stocks.filter( li => li.stock !== stockName)
+    console.log(1)
+    console.log(newStockslist)
+    setStocks(newStockslist)
+  }
 
   return (
 
@@ -69,6 +76,7 @@ export default function Dashboard() {
             <th>Quantity</th>
             <th>Price</th>
             <th>Total</th>
+            <th>Delete</th>
           </tr>
         </thead>
         <tbody>
@@ -80,6 +88,9 @@ export default function Dashboard() {
                 <td>{stocks.quantity}</td>
                 <td>{stocks.price}</td>
                 <td>{stocks.quantity * stocks.price}</td>
+                <td>
+                  <button type='button' onClick={() => handleDeleteStock(stocks.stock)}>Delete</button>
+                </td>
               </tr>
             );
           })}
@@ -97,7 +108,7 @@ export default function Dashboard() {
           <Form.Label>Quantity</Form.Label>
           <Form.Control type="text" onChange={handleNewStockQuantity} placeholder="Quantity" />
         </Form.Group>
-        
+
         <Form.Group className="mb-3" controlId="formPrice">
           <Form.Label>Quantity</Form.Label>
           <Form.Control type="text" onChange={handleNewPriceChange} placeholder="Price" />
