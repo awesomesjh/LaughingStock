@@ -12,7 +12,6 @@ Stock.init({
   },
   symbol: {
     type: DataTypes.STRING,
-    unique: true,
     allowNull: false
   },
   quantity: {

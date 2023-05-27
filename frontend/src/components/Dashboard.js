@@ -1,10 +1,9 @@
-import { Link } from 'react-router-dom';
-import Table from 'react-bootstrap/Table';
-import { useState } from "react";
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
+import Table from 'react-bootstrap/Table'
+import { useState } from 'react'
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
 
-export default function Dashboard() {
+const Dashboard = ({ user, handleLogout }) => {
   const defaultStocks = [
     {
       stock: "Tsla",
@@ -21,27 +20,23 @@ export default function Dashboard() {
       quantity: 3,
       price: 359.
     }
-  ];
+  ]
 
-  const [newStock, setNewStock] = useState("");
-  const [newPrice, setNewPrice] = useState("");
-  const [newQuantity, setNewQuantity] = useState("");
-  const [stocks, setStocks] = useState(defaultStocks);
+  const [newStock, setNewStock] = useState("")
+  const [newPrice, setNewPrice] = useState("")
+  const [newQuantity, setNewQuantity] = useState("")
+  const [stocks, setStocks] = useState(defaultStocks)
 
   const handleNewStockChange = (event) => {
-    setNewStock(event.target.value);
-  };
-
-  const handleNewPriceChange = (event) => {
-    setNewPrice(event.target.value);
-  };
+    setNewStock(event.target.value)
+  }
 
   const handleNewStockQuantity = (event) => {
-    setNewQuantity(event.target.value);
-  };
+    setNewQuantity(event.target.value)
+  }
 
   const handleNewStockSubmit = (event) => {
-    event.preventDefault();
+    event.preventDefault()
     setStocks([
       {
         stock: newStock,
@@ -49,17 +44,20 @@ export default function Dashboard() {
         price: newPrice,
       },
       ...stocks
-    ]);
-    setNewStock("");
-    setNewPrice("");
-    setNewQuantity("");
-  };
+    ])
+    setNewStock("")
+    setNewPrice("")
+    setNewQuantity("")
+  }
+
+  const handleDeleteStock = (stockName) => {
+    const newStockslist = stocks.filter( li => li.stock !== stockName)
+    setStocks(newStockslist)
+  }
 
   return (
-
-
     <main>
-      <h2>Welcome to Laughing Stock!</h2>
+      <h2>Welcome to Laughing Stock, {user.username}!</h2>
       <b></b>
       <Table striped bordered hover>
         <thead>
@@ -69,6 +67,7 @@ export default function Dashboard() {
             <th>Quantity</th>
             <th>Price</th>
             <th>Total</th>
+            <th>Delete</th>
           </tr>
         </thead>
         <tbody>
@@ -80,8 +79,11 @@ export default function Dashboard() {
                 <td>{stocks.quantity}</td>
                 <td>{stocks.price}</td>
                 <td>{stocks.quantity * stocks.price}</td>
+                <td>
+                  <button type='button' onClick={() => handleDeleteStock(stocks.stock)}>Delete</button>
+                </td>
               </tr>
-            );
+            )
           })}
         </tbody>
       </Table>
@@ -97,17 +99,17 @@ export default function Dashboard() {
           <Form.Label>Quantity</Form.Label>
           <Form.Control type="text" onChange={handleNewStockQuantity} placeholder="Quantity" />
         </Form.Group>
-        
-        <Form.Group className="mb-3" controlId="formPrice">
-          <Form.Label>Quantity</Form.Label>
-          <Form.Control type="text" onChange={handleNewPriceChange} placeholder="Price" />
-        </Form.Group>
 
         <Button variant="primary" type="submit">
           Add
         </Button>
       </Form>
-      <Link to="/">Go back to welcome page</Link>
+
+      <Button variant="danger" onClick={handleLogout}>
+        Logout
+      </Button>
     </main>
   )
 }
+
+export default Dashboard

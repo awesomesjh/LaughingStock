@@ -1,13 +1,15 @@
-import { Link } from 'react-router-dom';
+import Welcome from './Welcome'
+import Dashboard from './Dashboard'
 
-export default function Navbar () {
-
+const Main = ({ user, handleLogout }) => {
+  if (user) {
+    return (
+      <Dashboard user={user} handleLogout={handleLogout} />
+    )
+  }
   return (
-    <main>
-      <h2>Welcome to Laughing Stock!</h2>
-      <div><Link to="/signup">Signup!</Link></div>
-      <div><Link to="/login">Login</Link></div>
-      <div><Link to="/dashboard">Test only</Link></div>
-    </main>
+    <Welcome />
   )
 }
+
+export default Main

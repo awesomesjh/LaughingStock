@@ -2,38 +2,42 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import userService from '../services/users'
 import Notification from './Notification'
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
 
 const Signup = () => {
 
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
-	const [errorMessage, setErrorMessage] = useState(null)
+	const [message, setMessage] = useState(null)
 
-	const handleUsername = (event) => {
-		setUsername(event.target.value)
+	const handleUsernameChange = ({ target }) => {
+		setUsername(target.value)
 	}
 
-	const handlePassword = (event) => {
-		setPassword(event.target.value)
+	const handlePasswordChange = ({ target }) => {
+		setPassword(target.value)
 	}
 
 	const handleSignup = async (event) => {
 		event.preventDefault()
 
 		try {
-      const user = await userService.create({
+			console.log(username)
+			console.log(password)
+      await userService.create({
         username, password
       })
-			console.log(user)
       setUsername('')
       setPassword('')
+			setMessage('Account successfully created')
+			setTimeout(() => {
+        setMessage(null)
+      }, 5000)
     } catch (exception) {
-			console.log(exception)
-      setErrorMessage('Username has been taken')
+      setMessage('Username has been taken')
       setTimeout(() => {
-        setErrorMessage(null)
+        setMessage(null)
       }, 5000)
     }
 
@@ -62,12 +66,12 @@ const Signup = () => {
 			<Form onSubmit={handleSignup}>
         <Form.Group className="mb-3" controlId="formName">
           <Form.Label>Username</Form.Label>
-          <Form.Control type="text" onChange={handleUsername} placeholder="Enter username" />
+          <Form.Control type="text" value={username} onChange={handleUsernameChange} placeholder="Enter Username" />
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formPassword">
           <Form.Label>Password</Form.Label>
-          <Form.Control type="password" onChange={handlePassword} placeholder="Password" />
+          <Form.Control type="password" value={password} onChange={handlePasswordChange} placeholder="Enter Password" />
           <Form.Text className="text-muted">
             Don't forget your password
           </Form.Text>
@@ -77,7 +81,7 @@ const Signup = () => {
         </Button>
       </Form>
 
-			<Notification message={errorMessage} />
+			<Notification message={message} />
 			<h2>Try logging in now!</h2>
 			<Link to="/login">Login Page</Link>
 		</main>

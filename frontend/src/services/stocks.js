@@ -7,6 +7,10 @@ const setToken = newToken => {
   token = `Bearer ${newToken}`
 }
 
+const clearToken = () => {
+  token = null
+}
+
 const getAll = async () => {
   const response = await axios.get(baseUrl)
   return response.data
@@ -31,6 +35,6 @@ const remove = async (id) => {
   return response.data
 }
 
-const stockService = { getAll, create, update, remove, setToken }
+const stockService = { getAll, create, update, remove, setToken, clearToken }
 
 export default stockService
