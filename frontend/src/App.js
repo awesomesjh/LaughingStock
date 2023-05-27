@@ -53,10 +53,19 @@ const App = () => {
     setUser(null)
   }
 
+  const handleTimeout = () => {
+    handleLogout()
+    navigate('/login')
+    setErrorMessage('Session timed out. Please log in again.')
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
+  }
+
   return (
     <Container>
       <Routes>
-        <Route path="/" element={<Main user={user} handleLogout={handleLogout}/>} />
+        <Route path="/" element={<Main user={user} handleLogout={handleLogout} handleTimeout={handleTimeout}/>} />
         <Route 
           path="/login" 
           element={!user

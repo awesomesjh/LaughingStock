@@ -23,8 +23,6 @@ const Signup = () => {
 		event.preventDefault()
 
 		try {
-			console.log(username)
-			console.log(password)
       await userService.create({
         username, password
       })
@@ -46,23 +44,7 @@ const Signup = () => {
 	return (
 		<main>
 			<h2>Sign up for Laughing Stock here!</h2>
-
-			{/* <form onSubmit={handleSignup}>
-				<input
-					type="text"
-					placeholder="Username"
-					value={username}
-					onChange={handleUsername}
-				/>
-				<input
-					type="password"
-					placeholder="Password"
-					value={password}
-					onChange={handlePassword}
-				/>
-				<button type="submit">Create Account</button>
-			</form> */}
-
+			
 			<Form onSubmit={handleSignup}>
         <Form.Group className="mb-3" controlId="formName">
           <Form.Label>Username</Form.Label>

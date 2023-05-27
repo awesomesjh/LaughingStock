@@ -1,58 +1,86 @@
+import { useEffect, useState } from 'react'
 import Table from 'react-bootstrap/Table'
-import { useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
+import Stock from './Stock'
+import Notification from './Notification'
+import stockService from '../services/stocks'
 
-const Dashboard = ({ user, handleLogout }) => {
-  const defaultStocks = [
-    {
-      stock: "Tsla",
-      quantity: 2,
-      price: 184.47
-    },
-    {
-      stock: "Amazon",
-      quantity: 1,
-      price: 115.
-    },
-    {
-      stock: "Netflix",
-      quantity: 3,
-      price: 359.
+const Dashboard = ({ user, handleLogout, handleTimeout }) => {
+
+  const [newSymbol, setNewSymbol] = useState('')
+  const [newQuantity, setNewQuantity] = useState('')
+  const [stocks, setStocks] = useState([])
+  const [message, setMessage] = useState(null)
+
+  useEffect(() => {
+    const fetchStocks = async () => {
+      try {
+        const initialStocks = await stockService.getAll()
+        setStocks(initialStocks)
+      } catch (error) {
+        if (error.response.data.error === 'token invalid') {
+          handleTimeout()
+        }
+      }
     }
-  ]
+    fetchStocks()
+  }, [handleTimeout])
 
-  const [newStock, setNewStock] = useState("")
-  const [newPrice, setNewPrice] = useState("")
-  const [newQuantity, setNewQuantity] = useState("")
-  const [stocks, setStocks] = useState(defaultStocks)
-
-  const handleNewStockChange = (event) => {
-    setNewStock(event.target.value)
+  const handleNewSymbolChange = (event) => {
+    setNewSymbol(event.target.value)
   }
 
-  const handleNewStockQuantity = (event) => {
+  const handleNewQuantityChange = (event) => {
     setNewQuantity(event.target.value)
   }
 
-  const handleNewStockSubmit = (event) => {
+  const addStock = async (event) => {
     event.preventDefault()
-    setStocks([
-      {
-        stock: newStock,
-        quantity: newQuantity,
-        price: newPrice,
-      },
-      ...stocks
-    ])
-    setNewStock("")
-    setNewPrice("")
-    setNewQuantity("")
+    try {
+      if (newSymbol === '' || newQuantity === '') {
+        throw new Error('empty field')
+      }
+      if (newQuantity < 1) {
+        throw new Error('invalid quantity')
+      }
+      const newObject = {
+        symbol: newSymbol,
+        quantity: newQuantity
+      }
+      const newStock = await stockService.create(newObject)
+      setStocks(stocks.concat(newStock))
+      setNewSymbol('')
+      setNewQuantity('')
+    } catch (error) {
+      if (error.message === 'empty field') {
+        setMessage('Symbol and quantity cannot be empty')
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+      }
+      else if (error.message === 'invalid quantity') {
+        setMessage('Quantity cannot be less than 1')
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+      }
+      else if (error.response.data.error === 'token invalid') {
+        handleTimeout()
+      }
+    }
   }
 
-  const handleDeleteStock = (stockName) => {
-    const newStockslist = stocks.filter( li => li.stock !== stockName)
-    setStocks(newStockslist)
+  const deleteStock = async (stockId) => {
+    try {
+      await stockService.remove(stockId)
+      const filteredStocks = stocks.filter(stock => stock.id !== stockId)
+      setStocks(filteredStocks)
+    } catch (error) {
+      if (error.response.data.error === 'token invalid') {
+        handleTimeout()
+      }
+    }
   }
 
   return (
@@ -62,8 +90,7 @@ const Dashboard = ({ user, handleLogout }) => {
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th>#</th>
-            <th>Stock</th>
+            <th>Symbol</th>
             <th>Quantity</th>
             <th>Price</th>
             <th>Total</th>
@@ -71,39 +98,30 @@ const Dashboard = ({ user, handleLogout }) => {
           </tr>
         </thead>
         <tbody>
-          {stocks.map((stocks, i) => {
-            return (
-              <tr key={i}>
-                <td>{i + 1}</td>
-                <td>{stocks.stock}</td>
-                <td>{stocks.quantity}</td>
-                <td>{stocks.price}</td>
-                <td>{stocks.quantity * stocks.price}</td>
-                <td>
-                  <button type='button' onClick={() => handleDeleteStock(stocks.stock)}>Delete</button>
-                </td>
-              </tr>
-            )
-          })}
+          {stocks.map((stock) => 
+            <Stock key={stock.id} stock={stock} deleteStock={deleteStock} />
+          )}
         </tbody>
       </Table>
 
       <h2>Add new stock</h2>
-      <Form onSubmit={handleNewStockSubmit}>
+      <Form onSubmit={addStock}>
         <Form.Group className="mb-3" controlId="formStock">
-          <Form.Label>Stock</Form.Label>
-          <Form.Control type="text" onChange={handleNewStockChange} placeholder="Enter Stock" />
+          <Form.Label>Symbol</Form.Label>
+          <Form.Control type="text" value={newSymbol} onChange={handleNewSymbolChange} placeholder="Enter Symbol" />
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formQuantity">
           <Form.Label>Quantity</Form.Label>
-          <Form.Control type="text" onChange={handleNewStockQuantity} placeholder="Quantity" />
+          <Form.Control type="number" value={newQuantity} onChange={handleNewQuantityChange} placeholder="Enter Quantity" />
         </Form.Group>
 
         <Button variant="primary" type="submit">
           Add
         </Button>
       </Form>
+
+      <Notification message={message} />
 
       <Button variant="danger" onClick={handleLogout}>
         Logout

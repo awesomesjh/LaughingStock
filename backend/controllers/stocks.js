@@ -19,9 +19,18 @@ const tokenExtractor = (req, res, next) => {
   next()
 }
 
-router.get('/', async (req, res) => {
-  const stocks = await Stock.findAll()
-  res.json(stocks)
+router.get('/', tokenExtractor, async (req, res) => {
+  try {
+    const user = await User.findByPk(req.decodedToken.id)
+    const stocks = await Stock.findAll({
+      where: {
+        userId: user.id
+      }
+    })
+    res.json(stocks)
+  } catch(error) {
+    return res.status(400).json({ error })
+  }
 })
 
 router.post('/', tokenExtractor, async (req, res) => {
@@ -34,6 +43,7 @@ router.post('/', tokenExtractor, async (req, res) => {
   }
 })
 
+/*
 router.get('/:id', async (req, res) => {
   const stock = await Stock.findByPk(req.params.id)
   if (stock) {
@@ -42,13 +52,18 @@ router.get('/:id', async (req, res) => {
     res.status(404).end()
   }
 })
+*/
 
-router.delete('/:id', async (req, res) => {
-  const stock = await Stock.findByPk(req.params.id)
-  if (stock) {
-    await stock.destroy()
+router.delete('/:id', tokenExtractor, async (req, res) => {
+  try {
+    const stock = await Stock.findByPk(req.params.id)
+    if (stock) {
+      await stock.destroy()
+    }
+    res.status(204).end()
+  } catch(error) {
+    return res.status(400).json({ error })
   }
-  res.status(204).end()
 })
 
 router.put('/:id', async (req, res) => {

@@ -13,7 +13,7 @@ const Login = ({
 }) => {
   return (
     <main>
-      <h2>Sign in to Laughing Stock!</h2>
+      <h2>Log in to Laughing Stock!</h2>
       <Form onSubmit={handleLogin}>
         <Form.Group className="mb-3" controlId="formUsername">
           <Form.Label>Username</Form.Label>
