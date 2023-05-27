@@ -86,7 +86,6 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
   return (
     <main>
       <h2>Welcome to Laughing Stock, {user.username}!</h2>
-      <b></b>
       <Table striped bordered hover>
         <thead>
           <tr>
