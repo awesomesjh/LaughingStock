@@ -9,7 +9,7 @@ import stockService from '../services/stocks'
 const Dashboard = ({ user, handleLogout, handleTimeout }) => {
 
   const [newSymbol, setNewSymbol] = useState('')
-  const [newQuantity, setNewQuantity] = useState('')
+  const [newQuantity, setNewQuantity] = useState('') 
   const [stocks, setStocks] = useState([])
   const [message, setMessage] = useState(null)
 
@@ -35,13 +35,14 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
     setNewQuantity(event.target.value)
   }
 
+
   const addStock = async (event) => {
     event.preventDefault()
     try {
       if (newSymbol === '' || newQuantity === '') {
         throw new Error('empty field')
       }
-      if (newQuantity < 1) {
+      if (newQuantity < 1 || newQuantity.includes('.')) {
         throw new Error('invalid quantity')
       }
       const newObject = {
@@ -54,18 +55,16 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
       setNewQuantity('')
     } catch (error) {
       if (error.message === 'empty field') {
-        setMessage('Symbol and quantity cannot be empty')
+        setMessage('Data not saved. Symbol and quantity cannot be empty')
         setTimeout(() => {
           setMessage(null)
         }, 5000)
-      }
-      else if (error.message === 'invalid quantity') {
-        setMessage('Quantity cannot be less than 1')
+      } else if (error.message === 'invalid quantity') {
+        setMessage('Data not saved. Quantity must be a positive integer')
         setTimeout(() => {
           setMessage(null)
         }, 5000)
-      }
-      else if (error.response.data.error === 'token invalid') {
+      } else if (error.response.data.error === 'token invalid') {
         handleTimeout()
       }
     }
@@ -76,6 +75,10 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
       await stockService.remove(stockId)
       const filteredStocks = stocks.filter(stock => stock.id !== stockId)
       setStocks(filteredStocks)
+      setMessage('Stock successfully deleted')
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
     } catch (error) {
       if (error.response.data.error === 'token invalid') {
         handleTimeout()
@@ -83,21 +86,62 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
     }
   }
 
+  const handleQuantityChange = (event, id) => {
+    const stock = stocks.find(s => s.id === id)
+    const changedStock = { ...stock, quantity: event.target.value }
+    setStocks(stocks.map(s => s.id !== id ? s : changedStock))
+  }
 
+  const updateQuantity = async (id) => {
+    const stock = stocks.find(s => s.id === id)
+    try {
+      if (stock.quantity === '') {
+        throw new Error('empty field')
+      }
+      if (stock.quantity < 1 || stock.quantity.includes('.')) {
+        throw new Error('invalid quantity')
+      }
+      const updatedStock = await stockService.update(id, stock)
+      setStocks(stocks.map(s => s.id !== id ? s : updatedStock))
+      setMessage('Quantity has been successfully updated')
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+    } catch (error) {
+      if (error.message === 'empty field') {
+        setMessage('Data not saved. Quantity cannot be empty')
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+      } else if (error.message === 'invalid quantity') {
+        setMessage('Data not saved. Quantity must be a postive integer')
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+      } else if (error.response.data.error === 'token invalid') {
+        handleTimeout()
+      }
+    }
+    /*
+    console.log(event.target)
+    const { name, value } = event.target
 
-  const onChangeInput = (e, symbol) => {
-    const { name, value } = e.target
-
-    const editData = stocks.map((item) =>
-      item.symbol === symbol && name ? { ...item, [name]: value } : item
+    const editData = stocks.map((stock) =>
+      stock.symbol === symbol && name ? { ...stock, [name]: value } : stock
     )
 
     setStocks(editData)
+    */
   }
 
   return (
     <main>
-      <h2>Welcome to Laughing Stock, {user.username}!</h2>
+      <div className="heading">
+        <h2>Welcome to Laughing Stock, {user.username}!</h2>
+        <Button className="logout" variant="danger" onClick={handleLogout}>
+          Logout
+        </Button>
+      </div>
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -105,16 +149,22 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
             <th>Quantity</th>
             <th>Price</th>
             <th>Total</th>
-            <th class="text-center">Delete</th>
+            <th className="text-center">Delete</th>
           </tr>
         </thead>
         <tbody>
           {stocks.map((stock) =>
-            <Stock key={stock.id} stock={stock} deleteStock={deleteStock} onChangeInput={onChangeInput}/>
+            <Stock 
+              key={stock.id}
+              stock={stock}
+              deleteStock={deleteStock}
+              handleQuantityChange={handleQuantityChange}
+              updateQuantity={updateQuantity}
+            />
           )}
         </tbody>
       </Table>
-
+      <p>Total portfolio value = ${stocks.reduce((total, stock) => (total + stock.quantity * 120), 0).toLocaleString("en-US")}</p>
       <h2>Add new stock</h2>
       <Form onSubmit={addStock}>
         <Form.Group className="mb-3" controlId="formStock">
@@ -133,10 +183,6 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
       </Form>
 
       <Notification message={message} />
-
-      <Button variant="danger" onClick={handleLogout}>
-        Logout
-      </Button>
     </main>
   )
 }
