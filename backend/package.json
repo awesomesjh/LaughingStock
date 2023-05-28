@@ -20,7 +20,6 @@
     "umzug": "^3.2.1"
   },
   "devDependencies": {
-    "@flydotio/dockerfile": "^0.2.7",
     "nodemon": "^2.0.22"
   }
 }
