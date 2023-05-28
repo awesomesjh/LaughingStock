@@ -66,12 +66,16 @@ router.delete('/:id', tokenExtractor, async (req, res) => {
   }
 })
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', tokenExtractor, async (req, res) => {
   const stock = await Stock.findByPk(req.params.id)
   if (stock) {
     stock.quantity = req.body.quantity
-    await stock.save()
-    res.json(stock)
+    try {
+      await stock.save()
+      res.json(stock)
+    } catch (error) {
+      return res.status(400).json({ error })
+    }
   } else {
     res.status(404).end()
   }

@@ -108,6 +108,7 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
         setMessage(null)
       }, 5000)
     } catch (error) {
+      console.log(error)
       if (error.message === 'empty field') {
         setMessage('Data not saved. Quantity cannot be empty')
         setTimeout(() => {
@@ -122,16 +123,6 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
         handleTimeout()
       }
     }
-    /*
-    console.log(event.target)
-    const { name, value } = event.target
-
-    const editData = stocks.map((stock) =>
-      stock.symbol === symbol && name ? { ...stock, [name]: value } : stock
-    )
-
-    setStocks(editData)
-    */
   }
 
   return (

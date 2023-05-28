@@ -23,7 +23,6 @@ const Stock = ({ stock, deleteStock, handleQuantityChange, updateQuantity }) => 
         <span className='actions'>
           <BsFillTrashFill color='red' onClick={() => deleteStock(stock.id)} />
         </span>
-        {/* <button type='button' onClick={() => deleteStock(stock.id)}>Delete</button> */}
       </td>
     </tr>
   )
