@@ -83,6 +83,18 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
     }
   }
 
+
+
+  const onChangeInput = (e, symbol) => {
+    const { name, value } = e.target
+
+    const editData = stocks.map((item) =>
+      item.symbol === symbol && name ? { ...item, [name]: value } : item
+    )
+
+    setStocks(editData)
+  }
+
   return (
     <main>
       <h2>Welcome to Laughing Stock, {user.username}!</h2>
@@ -93,12 +105,12 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
             <th>Quantity</th>
             <th>Price</th>
             <th>Total</th>
-            <th>Delete</th>
+            <th class="text-center">Delete and Edit</th>
           </tr>
         </thead>
         <tbody>
-          {stocks.map((stock) => 
-            <Stock key={stock.id} stock={stock} deleteStock={deleteStock} />
+          {stocks.map((stock) =>
+            <Stock key={stock.id} stock={stock} deleteStock={deleteStock} onChangeInput={onChangeInput}/>
           )}
         </tbody>
       </Table>
