@@ -1,70 +1,69 @@
-# Getting Started with Create React App
+NUS Orbital 2023
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Hey there we are team Laughing Stock! =)
 
-## Available Scripts
+Level of achievement: Gemini
 
-In the project directory, you can run:
+Scope: We plan to create a website that displays one's current stock portfolio for easier checking and to gain experience in both web development and the creation of a telegram bot that can push notifications.
 
-### `npm start`
+Motivation: 
+1. Checking my stock portfolio using a trading app takes a lot of time in part due to 2FA, which can be very tedious and annoying especially if I just want to take a quick glance at my portfolio. Through this web application, I want to be able to easily check my stock portfolio with simple analysis tools. 
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+2. To gain experience with React, Express, PostgreSQL and the telegram API.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Our core features:
+1. User login functionality
+Allow users to create an account and log in
+Allow users to change their password
 
-### `npm test`
+2. Functionality to customize stock portfolio
+Allows users to add and remove stocks to their portfolio
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+3. Candlestick chart
+To view change in price of certain stock
 
-### `npm run build`
+4. Pie chart
+To view composition of portfolio
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+5. Line graph
+To view change in portfolio value over time
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+6. Links to relevant news articles
+To gain information on certain stocks
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+7. Telegram bot
+To push notifications predefined by the user
 
-### `npm run eject`
+User Stories:
+1. As a user, I would want to be able to easily access the website and get a quick overview of my portfolio.
+2. As a user, I want to be able to look at relevant charts and gain an insight on how my portfolio is doing.
+3. As a user, I would want to receive notifications if there is a significant change to the value of my portfolio.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Current Progress:
+Features: Currently, one can create an account and login in with it. Add, remove and edit a stock. 
+Problems: One must create their own fly.io database for the code to use. Edge cases have not been thoroughly tested. All stocks are currently set to be $120. Database is not fully linked to the rendering of the table.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Plans:
+Features to be completed by the mid of June:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+1. User login functionality
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+2. Functionality to customize stock portfolio
+Allows users to add and remove stocks to their portfolio
 
-## Learn More
+Features to be completed by the mid of July: 
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+1. Candlestick chart
+To view change in price of certain stock
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+2. Pie chart
+To view composition of portfolio
 
-### Code Splitting
+3. Line graph
+To view change in portfolio value over time
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+4. Links to relevant news articles
+To gain information on certain stocks
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+5. Telegram bot
+To push notifications predefined by the user
