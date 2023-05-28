@@ -23,22 +23,25 @@ const Signup = () => {
 		event.preventDefault()
 
 		try {
+      if (username === '' || password === '') {
+        throw new Error('empty field')
+      }
       await userService.create({
         username, password
       })
       setUsername('')
       setPassword('')
 			setMessage('Account successfully created')
-			setTimeout(() => {
-        setMessage(null)
-      }, 5000)
-    } catch (exception) {
-      setMessage('Username has been taken')
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
+    } catch (error) {
+      if (error.message === 'empty field') {
+        setMessage('Username and password cannot be empty')
+      } else {
+        setMessage('Username has been taken')
+      }
     }
-
+    setTimeout(() => {
+      setMessage(null)
+    }, 5000)
 	}
 
 	return (
