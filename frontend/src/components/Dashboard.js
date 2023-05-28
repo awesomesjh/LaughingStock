@@ -105,7 +105,7 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
             <th>Quantity</th>
             <th>Price</th>
             <th>Total</th>
-            <th class="text-center">Delete and Edit</th>
+            <th class="text-center">Delete</th>
           </tr>
         </thead>
         <tbody>
