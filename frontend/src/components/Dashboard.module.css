@@ -1,0 +1,9 @@
+.welcome {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px
+}
+
+.logout {
+  margin-left: auto;
+}

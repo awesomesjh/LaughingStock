@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
-import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
-import Stock from './Stock'
+import StockTable from './StockTable'
+import StockForm from './StockForm'
 import Notification from './Notification'
 import stockService from '../services/stocks'
+import compareBySymbol from '../util/compareBySymbol'
+import styles from './Dashboard.module.css'
 
 const Dashboard = ({ user, handleLogout, handleTimeout }) => {
 
@@ -17,6 +18,7 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
     const fetchStocks = async () => {
       try {
         const initialStocks = await stockService.getAll()
+        initialStocks.sort(compareBySymbol)
         setStocks(initialStocks)
       } catch (error) {
         if (error.response.data.error === 'token invalid') {
@@ -42,25 +44,32 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
       if (newSymbol === '' || newQuantity === '') {
         throw new Error('empty field')
       }
-      if (newQuantity < 1 || newQuantity.includes('.')) {
-        throw new Error('invalid quantity')
+      const newSymbolUpper = newSymbol.toUpperCase()
+      const stock = stocks.find(s => s.symbol === newSymbolUpper)
+      if (stock) {
+        const newObject = {
+          ...stock,
+          quantity: stock.quantity + parseInt(newQuantity)
+        }
+        const updatedStock = await stockService.update(stock.id, newObject)
+        setStocks(stocks.map(s => s.id !== stock.id ? s : updatedStock))
+      } else {
+        const newObject = {
+          symbol: newSymbolUpper,
+          quantity: newQuantity
+        }
+        const newStock = await stockService.create(newObject)
+        setStocks(stocks.concat(newStock).sort(compareBySymbol))
       }
-      const newObject = {
-        symbol: newSymbol,
-        quantity: newQuantity
-      }
-      const newStock = await stockService.create(newObject)
-      setStocks(stocks.concat(newStock))
       setNewSymbol('')
       setNewQuantity('')
+      setMessage('Stock successfully added')
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
     } catch (error) {
       if (error.message === 'empty field') {
         setMessage('Data not saved. Symbol and quantity cannot be empty')
-        setTimeout(() => {
-          setMessage(null)
-        }, 5000)
-      } else if (error.message === 'invalid quantity') {
-        setMessage('Data not saved. Quantity must be a positive integer')
         setTimeout(() => {
           setMessage(null)
         }, 5000)
@@ -68,12 +77,15 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
         handleTimeout()
       }
     }
+    setTimeout(() => {
+      setMessage(null)
+    }, 5000)
   }
 
-  const deleteStock = async (stockId) => {
+  const deleteStock = async (id) => {
     try {
-      await stockService.remove(stockId)
-      const filteredStocks = stocks.filter(stock => stock.id !== stockId)
+      await stockService.remove(id)
+      const filteredStocks = stocks.filter(stock => stock.id !== id)
       setStocks(filteredStocks)
       setMessage('Stock successfully deleted')
       setTimeout(() => {
@@ -88,7 +100,7 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
 
   const handleQuantityChange = (event, id) => {
     const stock = stocks.find(s => s.id === id)
-    const changedStock = { ...stock, quantity: event.target.value }
+    const changedStock = { ...stock, quantity: event.target.value === '' ? '' : Number(event.target.value) }
     setStocks(stocks.map(s => s.id !== id ? s : changedStock))
   }
 
@@ -98,24 +110,22 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
       if (stock.quantity === '') {
         throw new Error('empty field')
       }
-      if (stock.quantity < 1 || stock.quantity.includes('.')) {
-        throw new Error('invalid quantity')
+      if (stock.quantity === 0) {
+        await stockService.remove(id)
+        const filteredStocks = stocks.filter(stock => stock.id !== id)
+        setStocks(filteredStocks)
+        setMessage('Stock successfully deleted')
+      } else {
+        const updatedStock = await stockService.update(id, stock)
+        setStocks(stocks.map(s => s.id !== id ? s : updatedStock))
+        setMessage('Quantity has been successfully updated')
       }
-      const updatedStock = await stockService.update(id, stock)
-      setStocks(stocks.map(s => s.id !== id ? s : updatedStock))
-      setMessage('Quantity has been successfully updated')
       setTimeout(() => {
         setMessage(null)
       }, 5000)
     } catch (error) {
-      console.log(error)
       if (error.message === 'empty field') {
         setMessage('Data not saved. Quantity cannot be empty')
-        setTimeout(() => {
-          setMessage(null)
-        }, 5000)
-      } else if (error.message === 'invalid quantity') {
-        setMessage('Data not saved. Quantity must be a postive integer')
         setTimeout(() => {
           setMessage(null)
         }, 5000)
@@ -127,52 +137,27 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
 
   return (
     <main>
-      <div className="heading">
+      <div className={styles.welcome}>
         <h2>Welcome to Laughing Stock, {user.username}!</h2>
-        <Button className="logout" variant="danger" onClick={handleLogout}>
+        <Button className={styles.logout} variant="danger" onClick={handleLogout}>
           Logout
         </Button>
       </div>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Symbol</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Total</th>
-            <th className="text-center">Delete</th>
-          </tr>
-        </thead>
-        <tbody>
-          {stocks.map((stock) =>
-            <Stock 
-              key={stock.id}
-              stock={stock}
-              deleteStock={deleteStock}
-              handleQuantityChange={handleQuantityChange}
-              updateQuantity={updateQuantity}
-            />
-          )}
-        </tbody>
-      </Table>
+      <StockTable
+        stocks={stocks}
+        deleteStock={deleteStock}
+        handleQuantityChange={handleQuantityChange}
+        updateQuantity={updateQuantity}
+      />
       <p>Total portfolio value = ${stocks.reduce((total, stock) => (total + stock.quantity * 120), 0).toLocaleString("en-US")}</p>
       <h2>Add new stock</h2>
-      <Form onSubmit={addStock}>
-        <Form.Group className="mb-3" controlId="formStock">
-          <Form.Label>Symbol</Form.Label>
-          <Form.Control type="text" value={newSymbol} onChange={handleNewSymbolChange} placeholder="Enter Symbol" />
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="formQuantity">
-          <Form.Label>Quantity</Form.Label>
-          <Form.Control type="number" value={newQuantity} onChange={handleNewQuantityChange} placeholder="Enter Quantity" />
-        </Form.Group>
-
-        <Button variant="primary" type="submit">
-          Add
-        </Button>
-      </Form>
-
+      <StockForm
+        addStock={addStock}
+        newSymbol={newSymbol}
+        handleNewSymbolChange={handleNewSymbolChange}
+        newQuantity={newQuantity}
+        handleNewQuantityChange={handleNewQuantityChange}
+      />
       <Notification message={message} />
     </main>
   )

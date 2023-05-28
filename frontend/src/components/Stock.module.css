@@ -1,0 +1,22 @@
+.delete {
+  display: flex;
+  justify-content: space-around;
+}
+
+.delete svg{
+  cursor: pointer;
+}
+
+.quantity {
+  display: flex;
+}
+
+.input {
+  flex: 3;
+}
+
+.save {
+  border-width: thin;
+  margin-left: 10px;
+  flex: 1;
+}
