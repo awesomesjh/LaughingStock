@@ -5,7 +5,7 @@ const Stock = ({ stock, deleteStock, handleQuantityChange, updateQuantity }) => 
   const price = 120
   return (
     <tr>
-      <td>{stock.symbol}</td>
+      <td className='align-middle'>{stock.symbol}</td>
       <td className='quantity'>
         <input
           className = 'input'
@@ -17,9 +17,9 @@ const Stock = ({ stock, deleteStock, handleQuantityChange, updateQuantity }) => 
         />
         <button className='save' type='button' onClick={() => updateQuantity(stock.id)}>Save</button>
       </td>
-      <td>${price.toLocaleString("en-US")}</td>
-      <td>${(stock.quantity * price).toLocaleString("en-US")}</td>
-      <td>
+      <td className='align-middle'>${price.toLocaleString("en-US")}</td>
+      <td className='align-middle'>${(stock.quantity * price).toLocaleString("en-US")}</td>
+      <td className='align-middle'>
         <span className='actions'>
           <BsFillTrashFill color='red' onClick={() => deleteStock(stock.id)} />
         </span>
