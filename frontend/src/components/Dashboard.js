@@ -135,6 +135,15 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
     }
   }
 
+  const sortSymbolDescending = () => {
+    const sortedStocks = [...stocks].sort(compareBySymbol).reverse()
+    setStocks(sortedStocks)
+  }
+
+  const sortSymbolAscending = () => {
+    const sortedStocks = [...stocks].sort(compareBySymbol)
+    setStocks(sortedStocks)
+  }
 
   const sortQuantityDescending = () => {
     const sortedStocks = [...stocks].sort((a, b) => b.quantity - a.quantity)
@@ -159,9 +168,10 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
         deleteStock={deleteStock}
         handleQuantityChange={handleQuantityChange}
         updateQuantity={updateQuantity}
+        sortSymbolDescending={sortSymbolDescending}
+        sortSymbolAscending={sortSymbolAscending}
         sortQuantityDescending={sortQuantityDescending}
         sortQuantityAscending={sortQuantityAscending}
-        
       />
       <p>Total portfolio value = ${stocks.reduce((total, stock) => (total + stock.quantity * 120), 0).toLocaleString("en-US")}</p>
       <h2>Add new stock</h2>

@@ -1,6 +1,7 @@
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import blockKeys from '../util/blockKeys'
+import blockPaste from '../util/blockPaste'
 
 const StockForm = ({ addStock, newSymbol, handleNewSymbolChange, newQuantity, handleNewQuantityChange }) => {
   return (
@@ -22,6 +23,7 @@ const StockForm = ({ addStock, newSymbol, handleNewSymbolChange, newQuantity, ha
           value={newQuantity}
           onKeyDown={(event) => blockKeys(event)}
           onChange={handleNewQuantityChange}
+          onPaste={(event) => blockPaste(event)}
           placeholder='Enter Quantity'
         />
       </Form.Group>

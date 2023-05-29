@@ -1,5 +1,6 @@
 import { BsFillTrashFill } from 'react-icons/bs'
 import blockKeys from '../util/blockKeys'
+import blockPaste from '../util/blockPaste'
 import styles from './Stock.module.css'
 
 const Stock = ({ stock, deleteStock, handleQuantityChange, updateQuantity }) => {
@@ -16,6 +17,7 @@ const Stock = ({ stock, deleteStock, handleQuantityChange, updateQuantity }) => 
           min='0'
           onKeyDown={(event) => blockKeys(event)}
           onChange={(event) => handleQuantityChange(event, stock.id)}
+          onPaste={(event) => blockPaste(event)}
           placeholder='Enter Quantity'
         />
         <button className={styles.save} type='button' onClick={() => updateQuantity(stock.id)}>Save</button>
