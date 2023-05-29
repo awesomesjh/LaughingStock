@@ -10,13 +10,11 @@ import styles from './StockTable.module.css'
 
 const StockTable = ({
   stocks,
+  sortBy,
   deleteStock,
   handleQuantityChange,
   updateQuantity,
-  sortSymbolDescending,
-  sortSymbolAscending,
-  sortQuantityDescending,
-  sortQuantityAscending
+  sortStocksAndUpdate
 }) => {
   return (
     <Table striped bordered hover>
@@ -25,15 +23,27 @@ const StockTable = ({
           <th>
             Symbol
             <span className={styles.sort}>
-              <FcAlphabeticalSortingZa onClick={sortSymbolDescending} />
-              <FcAlphabeticalSortingAz onClick={sortSymbolAscending} />
+              <FcAlphabeticalSortingZa 
+                className={sortBy === 'symbol descending' ? styles.selected : ''}
+                onClick={() => sortStocksAndUpdate(stocks, 'symbol descending')}
+              />
+              <FcAlphabeticalSortingAz
+                className={sortBy === 'symbol ascending' ? styles.selected : ''}
+                onClick={() => sortStocksAndUpdate(stocks, 'symbol ascending')}
+              />
             </span>
           </th>
           <th>
             Quantity
             <span className={styles.sort}>
-              <FcNumericalSorting21 onClick={sortQuantityDescending} />
-              <FcNumericalSorting12 onClick={sortQuantityAscending} />
+              <FcNumericalSorting21
+                className={sortBy === 'quantity descending' ? styles.selected : ''}
+                onClick={() => sortStocksAndUpdate(stocks, 'quantity descending')}
+              />
+              <FcNumericalSorting12
+                className={sortBy === 'quantity ascending' ? styles.selected : ''}
+                onClick={() => sortStocksAndUpdate(stocks, 'quantity ascending')}
+              />
             </span>
           </th>
           <th>

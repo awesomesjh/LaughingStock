@@ -32,6 +32,11 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull: false
       },
+      sort_by: {
+        type: DataTypes.STRING,
+        defaultValue: 'symbol ascending',
+        allowNull: false,
+      },
     })
     await queryInterface.addColumn('stocks', 'user_id', {
       type: DataTypes.INTEGER,

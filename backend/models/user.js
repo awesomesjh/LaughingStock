@@ -19,6 +19,11 @@ User.init({
     type: DataTypes.STRING,
     allowNull: false
   },
+  sortBy: {
+    type: DataTypes.STRING,
+    defaultValue: 'symbol ascending',
+    allowNull: false,
+  },
 }, {
   sequelize,
   underscored: true,

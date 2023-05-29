@@ -27,6 +27,7 @@ router.get('/', tokenExtractor, async (req, res) => {
         userId: user.id
       }
     })
+    stocks.push(user.sortBy)
     res.json(stocks)
   } catch(error) {
     return res.status(400).json({ error })

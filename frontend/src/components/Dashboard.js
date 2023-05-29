@@ -4,7 +4,8 @@ import StockTable from './StockTable'
 import StockForm from './StockForm'
 import Notification from './Notification'
 import stockService from '../services/stocks'
-import compareBySymbol from '../util/compareBySymbol'
+import userService from '../services/users'
+import sortStocks from '../util/sortStocks'
 import styles from './Dashboard.module.css'
 
 const Dashboard = ({ user, handleLogout, handleTimeout }) => {
@@ -12,15 +13,19 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
   const [newSymbol, setNewSymbol] = useState('')
   const [newQuantity, setNewQuantity] = useState('') 
   const [stocks, setStocks] = useState([])
+  const [sortBy, setSortBy] = useState(null)
   const [message, setMessage] = useState(null)
 
   useEffect(() => {
     const fetchStocks = async () => {
       try {
-        const initialStocks = await stockService.getAll()
-        initialStocks.sort(compareBySymbol)
-        setStocks(initialStocks)
+        const response = await stockService.getAll()
+        const initialStocks = response.slice(0, -1)
+        const initialSortBy = response.pop()
+        setStocks(sortStocks(initialStocks, initialSortBy))
+        setSortBy(initialSortBy)
       } catch (error) {
+        console.log(error)
         if (error.response.data.error === 'token invalid') {
           handleTimeout()
         }
@@ -52,14 +57,15 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
           quantity: stock.quantity + parseInt(newQuantity)
         }
         const updatedStock = await stockService.update(stock.id, newObject)
-        setStocks(stocks.map(s => s.id !== stock.id ? s : updatedStock))
+        // Might lead to unnecessary sorting, but doing checks leads to more convoluted code
+        setStocks(sortStocks(stocks.map(s => s.id !== stock.id ? s : updatedStock), sortBy))
       } else {
         const newObject = {
           symbol: newSymbolUpper,
           quantity: newQuantity
         }
         const newStock = await stockService.create(newObject)
-        setStocks(stocks.concat(newStock).sort(compareBySymbol))
+        setStocks(sortStocks(stocks.concat(newStock), sortBy))
       }
       setNewSymbol('')
       setNewQuantity('')
@@ -117,7 +123,8 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
         setMessage('Stock successfully deleted')
       } else {
         const updatedStock = await stockService.update(id, stock)
-        setStocks(stocks.map(s => s.id !== id ? s : updatedStock))
+        // Might lead to unnecessary sorting, but doing checks leads to more convoluted code
+        setStocks(sortStocks(stocks.map(s => s.id !== id ? s : updatedStock), sortBy))
         setMessage('Quantity has been successfully updated')
       }
       setTimeout(() => {
@@ -135,24 +142,14 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
     }
   }
 
-  const sortSymbolDescending = () => {
-    const sortedStocks = [...stocks].sort(compareBySymbol).reverse()
+  const sortStocksAndUpdate = async (s, sb) => {
+    const sortedStocks = sortStocks([ ...s ], sb)
     setStocks(sortedStocks)
-  }
-
-  const sortSymbolAscending = () => {
-    const sortedStocks = [...stocks].sort(compareBySymbol)
-    setStocks(sortedStocks)
-  }
-
-  const sortQuantityDescending = () => {
-    const sortedStocks = [...stocks].sort((a, b) => b.quantity - a.quantity)
-    setStocks(sortedStocks)
-  }
-
-  const sortQuantityAscending = () => {
-    const sortedStocks = [...stocks].sort((a, b) => a.quantity - b.quantity)
-    setStocks(sortedStocks)
+    setSortBy(sb)
+    const newObject = {
+      sortBy: sb
+    }
+    await userService.update(user.id, newObject)
   }
 
   return (
@@ -165,13 +162,11 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
       </div>
       <StockTable
         stocks={stocks}
+        sortBy={sortBy}
         deleteStock={deleteStock}
         handleQuantityChange={handleQuantityChange}
         updateQuantity={updateQuantity}
-        sortSymbolDescending={sortSymbolDescending}
-        sortSymbolAscending={sortSymbolAscending}
-        sortQuantityDescending={sortQuantityDescending}
-        sortQuantityAscending={sortQuantityAscending}
+        sortStocksAndUpdate={sortStocksAndUpdate}
       />
       <p>Total portfolio value = ${stocks.reduce((total, stock) => (total + stock.quantity * 120), 0).toLocaleString("en-US")}</p>
       <h2>Add new stock</h2>
