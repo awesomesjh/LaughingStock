@@ -1,3 +1,11 @@
 .tr th {
   width: 10%;
 }
+
+.sort {
+  float: right;
+}
+
+.sort svg{
+  cursor: pointer;
+}
