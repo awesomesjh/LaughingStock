@@ -9,6 +9,8 @@ import userService from '../services/users'
 import sortStocks from '../util/sortStocks'
 import styles from './Dashboard.module.css'
 
+var INITIAL_SORT_BY = null
+
 const Dashboard = ({ user, handleLogout, handleTimeout }) => {
 
   const [newSymbol, setNewSymbol] = useState('')
@@ -21,16 +23,16 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
     const fetchStocks = async () => {
       try {
         const response = await stockService.getAll()
-        const initialStocks = response.slice(0, -1)
-        const initialSortBy = response.pop()
-        setStocks(sortStocks(initialStocks, initialSortBy))
-        setSortBy(initialSortBy)
+        const initialStocks = response.slice(0, -1)     
+        INITIAL_SORT_BY = response.pop()
+        setStocks(sortStocks(initialStocks, INITIAL_SORT_BY))
+        setSortBy(INITIAL_SORT_BY)
         const initialSymbols = initialStocks.map(s => s.symbol)
         const latestTrades = await tradeService.getLatestTrades(initialSymbols)
         for (const s of initialStocks) {
           s.price = latestTrades[s.symbol].Price
         }
-        setStocks(sortStocks(initialStocks, initialSortBy))
+        setStocks(sortStocks(initialStocks, INITIAL_SORT_BY))
       } catch (error) {
         if (error.response.data.error === 'token invalid') {
           handleTimeout()
@@ -39,6 +41,8 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
     }
     fetchStocks()
   }, [handleTimeout])
+
+  
 
   const handleNewSymbolChange = (event) => {
     setNewSymbol(event.target.value)
@@ -149,6 +153,7 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
   }
 
   const sortStocksAndUpdate = async (s, sb) => {
+    INITIAL_SORT_BY = sb
     const sortedStocks = sortStocks([ ...s ], sb)
     setStocks(sortedStocks)
     setSortBy(sb)
