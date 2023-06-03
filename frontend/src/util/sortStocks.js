@@ -19,13 +19,13 @@ const sortStocks = (stocks, sortBy) => {
     // case 'price ascending':
     //   stocks.sort((a, b) => (a.price > b.price) ? 1 : (a.price < b.price) ? -1 : 0)
     //   break
-    // case 'price decending':
+    // case 'price descending':
     //   stocks.sort((a, b) => (b.price > a.price) ? 1 : (b.price < a.price) ? -1 : 0)
     //   break
     // case 'total ascending':
     //   stocks.sort((a, b) => (a.price*a.quantity > b.price*b.quantity) ? 1 : (a.price*a.quanitity < b.price*b.quantity) ? -1 : 0)
     //   break
-    // case 'total decending':
+    // case 'total descending':
     //   stocks.sort((a, b) => (b.price*b.quantity > a.price*a.quantity) ? 1 : (b.price*b.quanitity < a.price*a.quantity) ? -1 : 0)
     //   break
   }

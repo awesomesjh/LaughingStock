@@ -1,10 +1,10 @@
 import { BsFillTrashFill } from 'react-icons/bs'
 import blockKeys from '../util/blockKeys'
 import blockPaste from '../util/blockPaste'
+import Loading from './Loading'
 import styles from './Stock.module.css'
 
 const Stock = ({ stock, deleteStock, handleQuantityChange, updateQuantity }) => {
-  const price = 120
   return (
     <tr>
       <td className='align-middle'>{stock.symbol}</td>
@@ -22,8 +22,8 @@ const Stock = ({ stock, deleteStock, handleQuantityChange, updateQuantity }) => 
         />
         <button className={styles.save} type='button' onClick={() => updateQuantity(stock.id)}>Save</button>
       </td>
-      <td className='align-middle'>${price.toLocaleString("en-US")}</td>
-      <td className='align-middle'>${(stock.quantity * price).toLocaleString("en-US")}</td>
+      <td className='align-middle'>{stock.price ? `$${stock.price.toFixed(2)}` : <Loading />}</td>
+      <td className='align-middle'>{stock.price ? `$${(stock.price * stock.quantity).toFixed(2)}` : <Loading />}</td>
       <td className='align-middle'>
         <span className={styles.delete}>
           <BsFillTrashFill color='red' onClick={() => deleteStock(stock.id)} />

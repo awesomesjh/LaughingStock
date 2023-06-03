@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import Button from 'react-bootstrap/Button'
 import StockTable from './StockTable'
 import StockForm from './StockForm'
 import Notification from './Notification'
 import stockService from '../services/stocks'
+import tradeService from '../services/trades'
 import userService from '../services/users'
 import sortStocks from '../util/sortStocks'
 import styles from './Dashboard.module.css'
@@ -15,15 +16,26 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
   const [stocks, setStocks] = useState([])
   const [sortBy, setSortBy] = useState(null)
   const [message, setMessage] = useState(null)
+  const hasLoaded = useRef(false)
 
   useEffect(() => {
     const fetchStocks = async () => {
       try {
-        const response = await stockService.getAll()
-        const initialStocks = response.slice(0, -1)
-        const initialSortBy = response.pop()
-        setStocks(sortStocks(initialStocks, initialSortBy))
-        setSortBy(initialSortBy)
+        //if (!hasLoaded.current) {
+          const response = await stockService.getAll()
+          //hasLoaded.current = true
+          const initialStocks = response.slice(0, -1)
+          const initialSortBy = response.pop()
+          setStocks(sortStocks(initialStocks, initialSortBy))
+          setSortBy(initialSortBy)
+          const initialSymbols = initialStocks.map(s => s.symbol)
+          const latestTrades = await tradeService.getLatestTrades(initialSymbols)
+          for (const s of initialStocks) {
+            s.price = latestTrades[s.symbol].Price
+          }
+          setStocks(sortStocks(initialStocks, initialSortBy))
+          console.log(sortBy)
+        //}
       } catch (error) {
         console.log(error)
         if (error.response.data.error === 'token invalid') {
@@ -152,6 +164,18 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
     await userService.update(user.id, newObject)
   }
 
+  const checkLoading = (stocks) => {
+    if (!stocks.length) {
+      return false
+    }
+    for (const stock of stocks) {
+      if (!stock.price) {
+        return true
+      }
+    }
+    return false
+  }
+
   return (
     <main>
       <div className={styles.welcome}>
@@ -168,7 +192,7 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
         updateQuantity={updateQuantity}
         sortStocksAndUpdate={sortStocksAndUpdate}
       />
-      <p>Total portfolio value = ${stocks.reduce((total, stock) => (total + stock.quantity * 120), 0).toLocaleString("en-US")}</p>
+      <p>{!checkLoading(stocks) ? `Total portfolio value = $${stocks.reduce((total, stock) => (total + stock.quantity * stock.price), 0).toFixed(2)}` : `Loading price data...`}</p>
       <h2>Add new stock</h2>
       <StockForm
         addStock={addStock}
