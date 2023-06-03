@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import StockTable from './StockTable'
 import StockForm from './StockForm'
@@ -16,28 +16,22 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
   const [stocks, setStocks] = useState([])
   const [sortBy, setSortBy] = useState(null)
   const [message, setMessage] = useState(null)
-  const hasLoaded = useRef(false)
 
   useEffect(() => {
     const fetchStocks = async () => {
       try {
-        //if (!hasLoaded.current) {
-          const response = await stockService.getAll()
-          //hasLoaded.current = true
-          const initialStocks = response.slice(0, -1)
-          const initialSortBy = response.pop()
-          setStocks(sortStocks(initialStocks, initialSortBy))
-          setSortBy(initialSortBy)
-          const initialSymbols = initialStocks.map(s => s.symbol)
-          const latestTrades = await tradeService.getLatestTrades(initialSymbols)
-          for (const s of initialStocks) {
-            s.price = latestTrades[s.symbol].Price
-          }
-          setStocks(sortStocks(initialStocks, initialSortBy))
-          console.log(sortBy)
-        //}
+        const response = await stockService.getAll()
+        const initialStocks = response.slice(0, -1)
+        const initialSortBy = response.pop()
+        setStocks(sortStocks(initialStocks, initialSortBy))
+        setSortBy(initialSortBy)
+        const initialSymbols = initialStocks.map(s => s.symbol)
+        const latestTrades = await tradeService.getLatestTrades(initialSymbols)
+        for (const s of initialStocks) {
+          s.price = latestTrades[s.symbol].Price
+        }
+        setStocks(sortStocks(initialStocks, initialSortBy))
       } catch (error) {
-        console.log(error)
         if (error.response.data.error === 'token invalid') {
           handleTimeout()
         }
