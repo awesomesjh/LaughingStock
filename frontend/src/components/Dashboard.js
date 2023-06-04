@@ -8,6 +8,7 @@ import tradeService from '../services/trades'
 import userService from '../services/users'
 import sortStocks from '../util/sortStocks'
 import styles from './Dashboard.module.css'
+import Analysis from './Analysis'
 
 var INITIAL_SORT_BY = null
 
@@ -192,6 +193,9 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
         sortStocksAndUpdate={sortStocksAndUpdate}
       />
       <p>{!checkLoading(stocks) ? `Total portfolio value = $${stocks.reduce((total, stock) => (total + stock.quantity * stock.price), 0).toFixed(2)}` : `Loading price data...`}</p>
+      <Analysis
+        stocks={stocks} 
+      />
       <h2>Add new stock</h2>
       <StockForm
         addStock={addStock}
