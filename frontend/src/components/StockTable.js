@@ -11,6 +11,7 @@ import styles from './StockTable.module.css'
 const StockTable = ({
   stocks,
   sortBy,
+  trades,
   deleteStock,
   handleQuantityChange,
   updateQuantity,
@@ -68,6 +69,7 @@ const StockTable = ({
           <Stock
             key={stock.id}
             stock={stock}
+            price={trades[stock.symbol] ? trades[stock.symbol].Price : null}
             deleteStock={deleteStock}
             handleQuantityChange={handleQuantityChange}
             updateQuantity={updateQuantity}

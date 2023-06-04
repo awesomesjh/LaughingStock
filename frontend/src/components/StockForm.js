@@ -2,6 +2,8 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import blockKeys from '../util/blockKeys'
 import blockPaste from '../util/blockPaste'
+import blockNonAlphabetKeys from '../util/blockNonAlphabetKeys'
+import blockNonAlphabetPaste from '../util/blockNonAlphabetPaste'
 
 const StockForm = ({ addStock, newSymbol, handleNewSymbolChange, newQuantity, handleNewQuantityChange }) => {
   return (
@@ -11,7 +13,9 @@ const StockForm = ({ addStock, newSymbol, handleNewSymbolChange, newQuantity, ha
         <Form.Control 
           type='text'
           value={newSymbol}
+          onKeyDown={(event) => blockNonAlphabetKeys(event)}
           onChange={handleNewSymbolChange}
+          onPaste={(event) => blockNonAlphabetPaste(event)}
           placeholder='Enter Symbol'
         />
       </Form.Group>

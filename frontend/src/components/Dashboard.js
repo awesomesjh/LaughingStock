@@ -12,9 +12,10 @@ import styles from './Dashboard.module.css'
 const Dashboard = ({ user, handleLogout, handleTimeout }) => {
 
   const [newSymbol, setNewSymbol] = useState('')
-  const [newQuantity, setNewQuantity] = useState('') 
+  const [newQuantity, setNewQuantity] = useState('')
   const [stocks, setStocks] = useState([])
   const [sortBy, setSortBy] = useState(null)
+  const [trades, setTrades] = useState({})
   const [message, setMessage] = useState(null)
 
   useEffect(() => {
@@ -26,11 +27,10 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
         setStocks(sortStocks(initialStocks, initialSortBy))
         setSortBy(initialSortBy)
         const initialSymbols = initialStocks.map(s => s.symbol)
-        const latestTrades = await tradeService.getLatestTrades(initialSymbols)
-        for (const s of initialStocks) {
-          s.price = latestTrades[s.symbol].Price
+        if (initialStocks.length) {
+          const latestTrades = await tradeService.getLatestTrades(initialSymbols)
+          setTrades(latestTrades)
         }
-        setStocks(sortStocks(initialStocks, initialSortBy))
       } catch (error) {
         if (error.response.data.error === 'token invalid') {
           handleTimeout()
@@ -48,19 +48,21 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
     setNewQuantity(event.target.value)
   }
 
-
   const addStock = async (event) => {
     event.preventDefault()
     try {
       if (newSymbol === '' || newQuantity === '') {
         throw new Error('empty field')
       }
+      const newQuantityCopy = newQuantity
       const newSymbolUpper = newSymbol.toUpperCase()
+      setNewSymbol('')
+      setNewQuantity('')
       const stock = stocks.find(s => s.symbol === newSymbolUpper)
       if (stock) {
         const newObject = {
           ...stock,
-          quantity: stock.quantity + parseInt(newQuantity)
+          quantity: stock.quantity + parseInt(newQuantityCopy)
         }
         const updatedStock = await stockService.update(stock.id, newObject)
         // Might lead to unnecessary sorting, but doing checks leads to more convoluted code
@@ -68,13 +70,24 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
       } else {
         const newObject = {
           symbol: newSymbolUpper,
-          quantity: newQuantity
+          quantity: newQuantityCopy
         }
         const newStock = await stockService.create(newObject)
-        setStocks(sortStocks(stocks.concat(newStock), sortBy))
+        const newStocks = stocks.concat(newStock)
+        setStocks(sortStocks(newStocks, sortBy))
+        const newSymbols = newStocks.map(s => s.symbol)
+        const latestTrades = await tradeService.getLatestTrades(newSymbols)
+        if (!latestTrades[newSymbolUpper]) {
+          await stockService.remove(newStock.id)
+          console.log(JSON.stringify(stocks))
+          const filteredStocks = newStocks.filter(stock => stock.id !== newStock.id)
+          console.log(JSON.stringify(stocks))
+          setStocks(sortStocks(filteredStocks, sortBy))
+          console.log(JSON.stringify(stocks))
+          throw new Error('invalid symbol')
+        }
+        setTrades(latestTrades)
       }
-      setNewSymbol('')
-      setNewQuantity('')
       setMessage('Stock successfully added')
       setTimeout(() => {
         setMessage(null)
@@ -82,6 +95,11 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
     } catch (error) {
       if (error.message === 'empty field') {
         setMessage('Data not saved. Symbol and quantity cannot be empty')
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+      } else if (error.message === 'invalid symbol') {
+        setMessage('Stock not found')
         setTimeout(() => {
           setMessage(null)
         }, 5000)
@@ -99,6 +117,10 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
       await stockService.remove(id)
       const filteredStocks = stocks.filter(stock => stock.id !== id)
       setStocks(filteredStocks)
+      const stock = stocks.find(s => s.id === id)
+      const filteredTrades = { ...trades }
+      delete filteredTrades[stock.symbol]
+      setTrades(filteredTrades)
       setMessage('Stock successfully deleted')
       setTimeout(() => {
         setMessage(null)
@@ -155,15 +177,13 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
     const newObject = {
       sortBy: sb
     }
+    console.log(JSON.stringify(stocks))
     await userService.update(user.id, newObject)
   }
 
-  const checkLoading = (stocks) => {
-    if (!stocks.length) {
-      return false
-    }
+  const loading = () => {
     for (const stock of stocks) {
-      if (!stock.price) {
+      if (!trades[stock.symbol]) {
         return true
       }
     }
@@ -181,12 +201,17 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
       <StockTable
         stocks={stocks}
         sortBy={sortBy}
+        trades={trades}
         deleteStock={deleteStock}
         handleQuantityChange={handleQuantityChange}
         updateQuantity={updateQuantity}
         sortStocksAndUpdate={sortStocksAndUpdate}
       />
-      <p>{!checkLoading(stocks) ? `Total portfolio value = $${stocks.reduce((total, stock) => (total + stock.quantity * stock.price), 0).toFixed(2)}` : `Loading price data...`}</p>
+      <p>
+        {loading()
+          ? `Loading price data...`
+          : `Total portfolio value = $${stocks.reduce((total, stock) => (total + stock.quantity * trades[stock.symbol].Price), 0).toFixed(2)}`}
+      </p>
       <h2>Add new stock</h2>
       <StockForm
         addStock={addStock}
