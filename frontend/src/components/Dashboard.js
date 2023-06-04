@@ -24,7 +24,7 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
         const response = await stockService.getAll()
         const initialStocks = response.slice(0, -1)
         const initialSortBy = response.pop()
-        setStocks(sortStocks(initialStocks, initialSortBy))
+        setStocks(initialStocks)
         setSortBy(initialSortBy)
         const initialSymbols = initialStocks.map(s => s.symbol)
         if (initialStocks.length) {
@@ -65,8 +65,7 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
           quantity: stock.quantity + parseInt(newQuantityCopy)
         }
         const updatedStock = await stockService.update(stock.id, newObject)
-        // Might lead to unnecessary sorting, but doing checks leads to more convoluted code
-        setStocks(sortStocks(stocks.map(s => s.id !== stock.id ? s : updatedStock), sortBy))
+        setStocks(stocks.map(s => s.id !== stock.id ? s : updatedStock))
       } else {
         const newObject = {
           symbol: newSymbolUpper,
@@ -74,16 +73,13 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
         }
         const newStock = await stockService.create(newObject)
         const newStocks = stocks.concat(newStock)
-        setStocks(sortStocks(newStocks, sortBy))
+        setStocks(newStocks)
         const newSymbols = newStocks.map(s => s.symbol)
         const latestTrades = await tradeService.getLatestTrades(newSymbols)
         if (!latestTrades[newSymbolUpper]) {
           await stockService.remove(newStock.id)
-          console.log(JSON.stringify(stocks))
           const filteredStocks = newStocks.filter(stock => stock.id !== newStock.id)
-          console.log(JSON.stringify(stocks))
-          setStocks(sortStocks(filteredStocks, sortBy))
-          console.log(JSON.stringify(stocks))
+          setStocks(filteredStocks)
           throw new Error('invalid symbol')
         }
         setTrades(latestTrades)
@@ -151,8 +147,7 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
         setMessage('Stock successfully deleted')
       } else {
         const updatedStock = await stockService.update(id, stock)
-        // Might lead to unnecessary sorting, but doing checks leads to more convoluted code
-        setStocks(sortStocks(stocks.map(s => s.id !== id ? s : updatedStock), sortBy))
+        setStocks(stocks.map(s => s.id !== id ? s : updatedStock))
         setMessage('Quantity has been successfully updated')
       }
       setTimeout(() => {
@@ -170,14 +165,11 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
     }
   }
 
-  const sortStocksAndUpdate = async (s, sb) => {
-    const sortedStocks = sortStocks([ ...s ], sb)
-    setStocks(sortedStocks)
+  const sortStocksAndUpdate = async (sb) => {
     setSortBy(sb)
     const newObject = {
       sortBy: sb
     }
-    console.log(JSON.stringify(stocks))
     await userService.update(user.id, newObject)
   }
 
@@ -199,7 +191,7 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
         </Button>
       </div>
       <StockTable
-        stocks={stocks}
+        stocks={sortStocks([ ...stocks ], sortBy)}
         sortBy={sortBy}
         trades={trades}
         deleteStock={deleteStock}
