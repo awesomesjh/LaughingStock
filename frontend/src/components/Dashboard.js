@@ -203,7 +203,8 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
         sortStocksAndUpdate={sortStocksAndUpdate}
       />
       <Analysis
-        stocks={stocks} 
+        stocks={sortStocks([ ...stocks ], sortBy)}
+        trades={trades}
       />
       <p>
         {loading()

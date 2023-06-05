@@ -1,16 +1,21 @@
 import PieChart from "./PieChart";
 
-function Analysis({stocks}) {
+function Analysis({stocks, trades}) {
+
+  const totalPrice = stocks.map((stock) => trades[stock.symbol] ? trades[stock.symbol].Price*stock.quantity : null)
 
   const data = {
     labels: stocks.map(s => s.symbol),
     datasets: [{
       label: 'Total',
-      data: stocks.map(s => s.price*s.quantity),
+      data: totalPrice,
       backgroundColor: [
-        'rgb(255, 99, 132)',
-        'rgb(54, 162, 235)',
-        'rgb(255, 205, 86)'
+        'rgb(244, 122, 31)',
+        'rgb(253, 187, 47)',
+        'rgb(55, 123, 43)',
+        'rgb(122, 193, 66)',
+        'rgb(0, 124, 195)',
+        'rgb(0, 82, 155)'
       ],
       hoverOffset: 4
     }]
@@ -18,7 +23,7 @@ function Analysis({stocks}) {
 
   return (
     <div>
-      <div style={{ width: 700 }}>
+      <div style={{ width: 500 }}>
         <PieChart chartData={data} />
       </div>
     </div>
