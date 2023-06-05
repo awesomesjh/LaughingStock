@@ -8,6 +8,7 @@ import tradeService from '../services/trades'
 import userService from '../services/users'
 import sortStocks from '../util/sortStocks'
 import styles from './Dashboard.module.css'
+import Analysis from './Analysis'
 
 const Dashboard = ({ user, handleLogout, handleTimeout }) => {
 
@@ -39,6 +40,8 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
     }
     fetchStocks()
   }, [handleTimeout])
+
+  
 
   const handleNewSymbolChange = (event) => {
     setNewSymbol(event.target.value)
@@ -200,6 +203,9 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
         updateQuantity={updateQuantity}
         sortStocksAndUpdate={sortStocksAndUpdate}
         loading={loading}
+      />
+      <Analysis
+        stocks={stocks} 
       />
       <p>
         {loading
