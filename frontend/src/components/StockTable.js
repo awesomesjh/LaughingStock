@@ -11,6 +11,7 @@ import styles from './StockTable.module.css'
 const StockTable = ({
   stocks,
   sortBy,
+  trades,
   deleteStock,
   handleQuantityChange,
   updateQuantity,
@@ -25,11 +26,11 @@ const StockTable = ({
             <span className={styles.sort}>
               <FcAlphabeticalSortingZa 
                 className={sortBy === 'symbol descending' ? styles.selected : ''}
-                onClick={() => sortStocksAndUpdate(stocks, 'symbol descending')}
+                onClick={() => sortStocksAndUpdate('symbol descending')}
               />
               <FcAlphabeticalSortingAz
                 className={sortBy === 'symbol ascending' ? styles.selected : ''}
-                onClick={() => sortStocksAndUpdate(stocks, 'symbol ascending')}
+                onClick={() => sortStocksAndUpdate('symbol ascending')}
               />
             </span>
           </th>
@@ -38,11 +39,11 @@ const StockTable = ({
             <span className={styles.sort}>
               <FcNumericalSorting21
                 className={sortBy === 'quantity descending' ? styles.selected : ''}
-                onClick={() => sortStocksAndUpdate(stocks, 'quantity descending')}
+                onClick={() => sortStocksAndUpdate('quantity descending')}
               />
               <FcNumericalSorting12
                 className={sortBy === 'quantity ascending' ? styles.selected : ''}
-                onClick={() => sortStocksAndUpdate(stocks, 'quantity ascending')}
+                onClick={() => sortStocksAndUpdate('quantity ascending')}
               />
             </span>
           </th>
@@ -68,6 +69,7 @@ const StockTable = ({
           <Stock
             key={stock.id}
             stock={stock}
+            price={trades[stock.symbol] ? trades[stock.symbol].Price : null}
             deleteStock={deleteStock}
             handleQuantityChange={handleQuantityChange}
             updateQuantity={updateQuantity}
