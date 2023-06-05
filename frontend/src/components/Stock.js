@@ -4,7 +4,14 @@ import blockPaste from '../util/blockPaste'
 import Loading from './Loading'
 import styles from './Stock.module.css'
 
-const Stock = ({ stock, price, deleteStock, handleQuantityChange, updateQuantity }) => {
+const Stock = ({
+  stock,
+  price,
+  deleteStock,
+  handleQuantityChange,
+  updateQuantity,
+  loading
+}) => {
   return (
     <tr>
       <td className='align-middle'>{stock.symbol}</td>
@@ -19,14 +26,22 @@ const Stock = ({ stock, price, deleteStock, handleQuantityChange, updateQuantity
           onChange={(event) => handleQuantityChange(event, stock.id)}
           onPaste={(event) => blockPaste(event)}
           placeholder='Enter Quantity'
+          readOnly={loading}
         />
-        <button className={styles.save} type='button' onClick={() => updateQuantity(stock.id)}>Save</button>
+        <button
+          className={styles.save}
+          type='button'
+          onClick={() => updateQuantity(stock.id)}
+          disabled={loading}
+        >
+          Save
+        </button>
       </td>
       <td className='align-middle'>{price ? `$${price.toFixed(2)}` : <Loading />}</td>
       <td className='align-middle'>{price ? `$${(price * stock.quantity).toFixed(2)}` : <Loading />}</td>
       <td className='align-middle'>
         <span className={styles.delete}>
-          <BsFillTrashFill color='red' onClick={() => deleteStock(stock.id)} />
+          <BsFillTrashFill color='red' onClick={loading ? null : () => deleteStock(stock.id)} />
         </span>
       </td>
     </tr>

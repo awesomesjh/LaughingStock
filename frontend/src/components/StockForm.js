@@ -5,7 +5,14 @@ import blockPaste from '../util/blockPaste'
 import blockNonAlphabetKeys from '../util/blockNonAlphabetKeys'
 import blockNonAlphabetPaste from '../util/blockNonAlphabetPaste'
 
-const StockForm = ({ addStock, newSymbol, handleNewSymbolChange, newQuantity, handleNewQuantityChange }) => {
+const StockForm = ({
+  addStock,
+  newSymbol,
+  handleNewSymbolChange,
+  newQuantity,
+  handleNewQuantityChange,
+  loading
+}) => {
   return (
     <Form onSubmit={addStock}>
       <Form.Group className='mb-3' controlId='formStock'>
@@ -17,6 +24,7 @@ const StockForm = ({ addStock, newSymbol, handleNewSymbolChange, newQuantity, ha
           onChange={handleNewSymbolChange}
           onPaste={(event) => blockNonAlphabetPaste(event)}
           placeholder='Enter Symbol'
+          readOnly={loading}
         />
       </Form.Group>
       <Form.Group className='mb-3' controlId='formQuantity'>
@@ -29,9 +37,10 @@ const StockForm = ({ addStock, newSymbol, handleNewSymbolChange, newQuantity, ha
           onChange={handleNewQuantityChange}
           onPaste={(event) => blockPaste(event)}
           placeholder='Enter Quantity'
+          readOnly={loading}
         />
       </Form.Group>
-      <Button variant='primary' type='submit'>
+      <Button variant='primary' type='submit' disabled={loading}>
         Add
       </Button>
     </Form>

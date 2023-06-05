@@ -54,22 +54,19 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
       if (newSymbol === '' || newQuantity === '') {
         throw new Error('empty field')
       }
-      const newQuantityCopy = newQuantity
       const newSymbolUpper = newSymbol.toUpperCase()
-      setNewSymbol('')
-      setNewQuantity('')
       const stock = stocks.find(s => s.symbol === newSymbolUpper)
       if (stock) {
         const newObject = {
           ...stock,
-          quantity: stock.quantity + parseInt(newQuantityCopy)
+          quantity: stock.quantity + parseInt(newQuantity)
         }
         const updatedStock = await stockService.update(stock.id, newObject)
         setStocks(stocks.map(s => s.id !== stock.id ? s : updatedStock))
       } else {
         const newObject = {
           symbol: newSymbolUpper,
-          quantity: newQuantityCopy
+          quantity: newQuantity
         }
         const newStock = await stockService.create(newObject)
         const newStocks = stocks.concat(newStock)
@@ -84,6 +81,8 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
         }
         setTrades(latestTrades)
       }
+      setNewSymbol('')
+      setNewQuantity('')
       setMessage('Stock successfully added')
       setTimeout(() => {
         setMessage(null)
@@ -173,7 +172,7 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
     await userService.update(user.id, newObject)
   }
 
-  const loading = () => {
+  const checkLoading = () => {
     for (const stock of stocks) {
       if (!trades[stock.symbol]) {
         return true
@@ -181,6 +180,8 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
     }
     return false
   }
+
+  const loading = checkLoading()
 
   return (
     <main>
@@ -191,16 +192,17 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
         </Button>
       </div>
       <StockTable
-        stocks={sortStocks([ ...stocks ], sortBy)}
+        stocks={sortStocks([ ...stocks ], sortBy, trades)}
         sortBy={sortBy}
         trades={trades}
         deleteStock={deleteStock}
         handleQuantityChange={handleQuantityChange}
         updateQuantity={updateQuantity}
         sortStocksAndUpdate={sortStocksAndUpdate}
+        loading={loading}
       />
       <p>
-        {loading()
+        {loading
           ? `Loading price data...`
           : `Total portfolio value = $${stocks.reduce((total, stock) => (total + stock.quantity * trades[stock.symbol].Price), 0).toFixed(2)}`}
       </p>
@@ -211,6 +213,7 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
         handleNewSymbolChange={handleNewSymbolChange}
         newQuantity={newQuantity}
         handleNewQuantityChange={handleNewQuantityChange}
+        loading={loading}
       />
       <Notification message={message} />
     </main>
