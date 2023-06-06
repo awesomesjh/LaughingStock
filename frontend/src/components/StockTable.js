@@ -15,7 +15,8 @@ const StockTable = ({
   deleteStock,
   handleQuantityChange,
   updateQuantity,
-  sortStocksAndUpdate
+  sortStocksAndUpdate,
+  loading
 }) => {
   return (
     <Table striped bordered hover>
@@ -50,15 +51,27 @@ const StockTable = ({
           <th>
             Price
             <span className={styles.sort}>
-              <FcNumericalSorting21 />
-              <FcNumericalSorting12 />
+              <FcNumericalSorting21
+                className={sortBy === 'price descending' ? styles.selected : ''}
+                onClick={loading ? null : () => sortStocksAndUpdate('price descending')}
+              />
+              <FcNumericalSorting12
+                className={sortBy === 'price ascending' ? styles.selected : ''}
+                onClick={loading ? null : () => sortStocksAndUpdate('price ascending')}
+              />
             </span>
           </th>
           <th>
             Total
             <span className={styles.sort}>
-              <FcNumericalSorting21 />
-              <FcNumericalSorting12 />
+              <FcNumericalSorting21
+                className={sortBy === 'total descending' ? styles.selected : ''}
+                onClick={loading ? null : () => sortStocksAndUpdate('total descending')}
+              />
+              <FcNumericalSorting12
+                className={sortBy === 'total ascending' ? styles.selected : ''}
+                onClick={loading ? null : () => sortStocksAndUpdate('total ascending')}
+              />
             </span>
           </th>
           <th className="text-center">Delete</th>
@@ -73,6 +86,7 @@ const StockTable = ({
             deleteStock={deleteStock}
             handleQuantityChange={handleQuantityChange}
             updateQuantity={updateQuantity}
+            loading={loading}
           />
         )}
       </tbody>

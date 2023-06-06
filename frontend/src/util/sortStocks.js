@@ -1,4 +1,4 @@
-const sortStocks = (stocks, sortBy) => {
+const sortStocks = (stocks, sortBy, trades) => {
   switch (sortBy) {
     default: //symbol ascending
       stocks.sort(compareBySymbol)
@@ -12,34 +12,66 @@ const sortStocks = (stocks, sortBy) => {
     case 'quantity descending':
       stocks.sort((a, b) => b.quantity - a.quantity)
       break
-    
-    // The following code can't be added yet as the price is still constant and not referencing the backend yet
-    // Take note the code has not been tested yet
-    //
-    // case 'price ascending':
-    //   stocks.sort((a, b) => (a.price > b.price) ? 1 : (a.price < b.price) ? -1 : 0)
-    //   break
-    // case 'price descending':
-    //   stocks.sort((a, b) => (b.price > a.price) ? 1 : (b.price < a.price) ? -1 : 0)
-    //   break
-    // case 'total ascending':
-    //   stocks.sort((a, b) => (a.price*a.quantity > b.price*b.quantity) ? 1 : (a.price*a.quanitity < b.price*b.quantity) ? -1 : 0)
-    //   break
-    // case 'total descending':
-    //   stocks.sort((a, b) => (b.price*b.quantity > a.price*a.quantity) ? 1 : (b.price*b.quanitity < a.price*a.quantity) ? -1 : 0)
-    //   break
+    case 'price ascending':
+      stocks.sort((a, b) => {
+        if (!trades[a.symbol] && !trades[b.symbol]) {
+          return compareBySymbol(a, b)
+        } else if (!trades[a.symbol] && trades[b.symbol]) {
+          return 1
+        } else if (trades[a.symbol] && !trades[b.symbol]) {
+          return -1
+        } else {
+          return trades[a.symbol].Price - trades[b.symbol].Price
+        }
+      })
+      break
+    case 'price descending':
+      stocks.sort((a, b) => {
+        if (!trades[a.symbol] && !trades[b.symbol]) {
+          return compareBySymbol(a, b)
+        } else if (!trades[a.symbol] && trades[b.symbol]) {
+          return 1
+        } else if (trades[a.symbol] && !trades[b.symbol]) {
+          return -1
+        } else {
+          return trades[b.symbol].Price - trades[a.symbol].Price
+        }
+      })
+      break
+    case 'total ascending':
+      stocks.sort((a, b) => {
+        if (!trades[a.symbol] && !trades[b.symbol]) {
+          return compareBySymbol(a, b)
+        } else if (!trades[a.symbol] && trades[b.symbol]) {
+          return 1
+        } else if (trades[a.symbol] && !trades[b.symbol]) {
+          return -1
+        } else {
+          return trades[a.symbol].Price * a.quantity - trades[b.symbol].Price * b.quantity
+        }
+      })
+      break
+    case 'total descending':
+      stocks.sort((a, b) => {
+        if (!trades[a.symbol] && !trades[b.symbol]) {
+          return compareBySymbol(a, b)
+        } else if (!trades[a.symbol] && trades[b.symbol]) {
+          return 1
+        } else if (trades[a.symbol] && !trades[b.symbol]) {
+          return -1
+        } else {
+          return trades[b.symbol].Price * b.quantity - trades[a.symbol].Price * a.quantity
+        }
+      })
   }
   return stocks
 }
 
 const compareBySymbol = (a, b) => {
-  const symbolA = a.symbol.toUpperCase()
-  const symbolB = b.symbol.toUpperCase()
-
-  if (symbolA < symbolB) {
+  if (a.symbol < b.symbol) {
     return -1
   }
-  if (symbolA > symbolB) {
+  if (a.symbol > b.symbol) {
     return 1
   }
   return 0
