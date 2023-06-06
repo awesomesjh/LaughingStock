@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import StockTable from './StockTable'
 import StockForm from './StockForm'
+import Analysis from './Analysis'
 import Notification from './Notification'
 import stockService from '../services/stocks'
 import tradeService from '../services/trades'
 import userService from '../services/users'
 import sortStocks from '../util/sortStocks'
 import styles from './Dashboard.module.css'
-import Analysis from './Analysis'
 
 const Dashboard = ({ user, handleLogout, handleTimeout }) => {
 
@@ -204,15 +204,15 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
         sortStocksAndUpdate={sortStocksAndUpdate}
         loading={loading}
       />
-      <Analysis
-        stocks={sortStocks([ ...stocks ], sortBy, trades)}
-        trades={trades}
-      />
       <p>
         {loading
           ? `Loading price data...`
           : `Total portfolio value = $${stocks.reduce((total, stock) => (total + stock.quantity * trades[stock.symbol].Price), 0).toFixed(2)}`}
       </p>
+      <Analysis
+        stocks={sortStocks([ ...stocks ], sortBy, trades)}
+        trades={trades}
+      />
       <h2>Add new stock</h2>
       <StockForm
         addStock={addStock}
