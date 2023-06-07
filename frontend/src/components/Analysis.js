@@ -1,8 +1,8 @@
-import PieChart from "./PieChart"
+import PieChart from './PieChart'
 
-function Analysis({stocks, trades}) {
+const Analysis = ({ stocks, trades }) => {
 
-  const totalPrice = stocks.map((stock) => trades[stock.symbol] ? trades[stock.symbol].Price*stock.quantity : null)
+  const totalPrice = stocks.map((stock) => trades[stock.symbol] ? trades[stock.symbol].Price * stock.quantity : null)
 
   const data = {
     labels: stocks.map(s => s.symbol),
@@ -19,7 +19,7 @@ function Analysis({stocks, trades}) {
       ],
       hoverOffset: 4
     }]
-  };
+  }
 
   return (
     <div>
@@ -27,7 +27,7 @@ function Analysis({stocks, trades}) {
         <PieChart chartData={data} />
       </div>
     </div>
-  );
+  )
 }
 
 export default Analysis
