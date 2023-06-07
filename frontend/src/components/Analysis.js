@@ -1,4 +1,4 @@
-import PieChart from "./PieChart";
+import PieChart from "./PieChart"
 
 function Analysis({stocks, trades}) {
 
@@ -30,4 +30,4 @@ function Analysis({stocks, trades}) {
   );
 }
 
-export default Analysis;
+export default Analysis
