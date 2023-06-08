@@ -12,7 +12,7 @@ const alpaca = new Alpaca({
 router.get('/:symbol', async (req, res) => {
   try {
     const symbol = req.params.symbol
-    let date = new Date() // date = current time
+    const date = new Date() // date = current time
     date.setFullYear(date.getFullYear() - 1) // date = current time - 1 year
     const options = {
       start: date,
