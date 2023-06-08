@@ -7,6 +7,7 @@ import loginService from './services/login'
 import stockService from './services/stocks'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Container from 'react-bootstrap/Container'
+import TestAnalysis from './components/TestAnalysis'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -24,7 +25,7 @@ const App = () => {
     }
   }, [])
 
-  const handleLogin = async (event) => { 
+  const handleLogin = async (event) => {
     event.preventDefault()
     try {
       const user = await loginService.login({
@@ -33,7 +34,7 @@ const App = () => {
       stockService.setToken(user.token)
       window.localStorage.setItem(
         'loggedLaughingStockUser', JSON.stringify(user)
-      ) 
+      )
       setUser(user)
       setUsername('')
       setPassword('')
@@ -65,22 +66,38 @@ const App = () => {
   return (
     <Container>
       <Routes>
-        <Route path="/" element={<Main user={user} handleLogout={handleLogout} handleTimeout={handleTimeout}/>} />
-        <Route 
-          path="/login" 
+        <Route path="/" element={<Main user={user} handleLogout={handleLogout} handleTimeout={handleTimeout} />} />
+        <Route
+          path="/login"
           element={!user
-            ? <Login 
-                username={username}
-                password={password}
-                handleUsernameChange={({ target }) => setUsername(target.value)}
-                handlePasswordChange={({ target }) => setPassword(target.value)}
-                handleLogin={handleLogin}
-                errorMessage={errorMessage}
-              />
+            ? <Login
+              username={username}
+              password={password}
+              handleUsernameChange={({ target }) => setUsername(target.value)}
+              handlePasswordChange={({ target }) => setPassword(target.value)}
+              handleLogin={handleLogin}
+              errorMessage={errorMessage}
+            />
             : <Navigate replace to="/" />
           }
         />
         <Route path="/signup" element={!user ? <Signup /> : <Navigate replace to="/" />} />
+        <Route
+          path="/TestAnalysis"
+          element={!user
+            ? <Login
+              username={username}
+              password={password}
+              handleUsernameChange={({ target }) => setUsername(target.value)}
+              handlePasswordChange={({ target }) => setPassword(target.value)}
+              handleLogin={handleLogin}
+              errorMessage={errorMessage}
+            />
+            : <TestAnalysis 
+              handleLogout={handleLogout}
+            />
+          }
+        />
       </Routes>
     </Container>
   )

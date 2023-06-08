@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import Button from 'react-bootstrap/Button'
 import StockTable from './StockTable'
 import StockForm from './StockForm'
 import Analysis from './Analysis'
@@ -8,7 +7,7 @@ import stockService from '../services/stocks'
 import tradeService from '../services/trades'
 import userService from '../services/users'
 import sortStocks from '../util/sortStocks'
-import styles from './Dashboard.module.css'
+import Navbar from './Navbar'
 
 const Dashboard = ({ user, handleLogout, handleTimeout }) => {
 
@@ -188,12 +187,12 @@ const Dashboard = ({ user, handleLogout, handleTimeout }) => {
 
   return (
     <main>
-      <div className={styles.welcome}>
-        <h2>Welcome to Laughing Stock, {user.username}!</h2>
-        <Button className={styles.logout} variant="danger" onClick={handleLogout}>
-          Logout
-        </Button>
-      </div>
+      <Navbar
+        user={user}
+        handleLogout={handleLogout} 
+        stocks={stocks}
+        trades={trades}
+      />
       <StockTable
         stocks={sortStocks([ ...stocks ], sortBy, trades)}
         sortBy={sortBy}
