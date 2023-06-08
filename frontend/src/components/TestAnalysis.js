@@ -1,9 +1,9 @@
+import { useLocation } from 'react-router-dom'
 import PieChart from './PieChart'
 import Navbar from './Navbar'
-import { useLocation } from 'react-router-dom';
 
-const TestAnalysis = ( {handleLogout} ) => {
-  const location = useLocation();
+const TestAnalysis = ({ handleLogout }) => {
+  const location = useLocation()
   const { data } = location.state
   const { user, stocks, trades } = data
   const totalPrice = stocks.map((stock) => trades[stock.symbol] ? trades[stock.symbol].Price * stock.quantity : null)

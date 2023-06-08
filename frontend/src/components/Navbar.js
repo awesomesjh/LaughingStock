@@ -1,12 +1,12 @@
-import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import Offcanvas from 'react-bootstrap/Offcanvas';
-import styles from './Dashboard.module.css'
 import { Link, useNavigate } from 'react-router-dom'
+import Button from 'react-bootstrap/Button'
+import Container from 'react-bootstrap/Container'
+import Form from 'react-bootstrap/Form'
+import Nav from 'react-bootstrap/Nav'
+import Navbar from 'react-bootstrap/Navbar'
+import NavDropdown from 'react-bootstrap/NavDropdown'
+import Offcanvas from 'react-bootstrap/Offcanvas'
+import styles from './Navbar.module.css'
 
 const Navibar = ({ user, handleLogout, stocks, trades }) => {
   const navigate = useNavigate()
@@ -72,7 +72,7 @@ const Navibar = ({ user, handleLogout, stocks, trades }) => {
         </Navbar>
       ))}
     </>
-  );
+  )
 }
 
-export default Navibar;
+export default Navibar

@@ -6,6 +6,7 @@ const { connectToDatabase } = require('./util/db')
 
 const stocksRouter = require('./controllers/stocks')
 const tradesRouter = require('./controllers/trades')
+const barsRouter = require('./controllers/bars')
 const usersRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
 
@@ -13,6 +14,7 @@ app.use(express.json())
 
 app.use('/api/stocks', stocksRouter)
 app.use('/api/trades', tradesRouter)
+app.use('/api/bars', barsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
 

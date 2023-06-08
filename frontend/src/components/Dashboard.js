@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react'
 import StockTable from './StockTable'
 import StockForm from './StockForm'
 import Analysis from './Analysis'
+import Navbar from './Navbar'
 import Notification from './Notification'
 import stockService from '../services/stocks'
 import tradeService from '../services/trades'
 import userService from '../services/users'
 import sortStocks from '../util/sortStocks'
-import Navbar from './Navbar'
 
 const Dashboard = ({ user, handleLogout, handleTimeout }) => {
 

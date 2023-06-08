@@ -3,11 +3,12 @@ import { Routes, Route, useNavigate, Navigate } from 'react-router-dom'
 import Main from './components/Main'
 import Signup from './components/Signup'
 import Login from './components/Login'
+import TestAnalysis from './components/TestAnalysis'
+import Candlestick from './components/Candlestick'
 import loginService from './services/login'
 import stockService from './services/stocks'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Container from 'react-bootstrap/Container'
-import TestAnalysis from './components/TestAnalysis'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -63,13 +64,22 @@ const App = () => {
     }, 5000)
   }
 
+  const checkLoggedIn = () => {
+    if (window.localStorage.getItem('loggedLaughingStockUser')) {
+      return true
+    }
+    return false
+  }
+
+  const loggedIn = checkLoggedIn()
+
   return (
     <Container>
       <Routes>
-        <Route path="/" element={<Main user={user} handleLogout={handleLogout} handleTimeout={handleTimeout} />} />
+        <Route path='/' element={<Main user={user} handleLogout={handleLogout} handleTimeout={handleTimeout} />} />
         <Route
-          path="/login"
-          element={!user
+          path='/login'
+          element={!loggedIn
             ? <Login
               username={username}
               password={password}
@@ -78,24 +88,22 @@ const App = () => {
               handleLogin={handleLogin}
               errorMessage={errorMessage}
             />
-            : <Navigate replace to="/" />
+            : <Navigate replace to='/' />
           }
         />
-        <Route path="/signup" element={!user ? <Signup /> : <Navigate replace to="/" />} />
+        <Route path='/signup' element={!loggedIn ? <Signup /> : <Navigate replace to='/' />} />
         <Route
-          path="/TestAnalysis"
-          element={!user
-            ? <Login
-              username={username}
-              password={password}
-              handleUsernameChange={({ target }) => setUsername(target.value)}
-              handlePasswordChange={({ target }) => setPassword(target.value)}
-              handleLogin={handleLogin}
-              errorMessage={errorMessage}
-            />
-            : <TestAnalysis 
-              handleLogout={handleLogout}
-            />
+          path='/TestAnalysis'
+          element={loggedIn
+            ? <TestAnalysis handleLogout={handleLogout} />
+            : <Navigate replace to='/login' />
+          }
+        />
+        <Route
+          path='/candlestick'
+          element={loggedIn
+            ? <Candlestick handleLogout={handleLogout} />
+            : <Navigate replace to='/login' />
           }
         />
       </Routes>
