@@ -14,7 +14,7 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [message, setMessage] = useState(null)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -42,9 +42,9 @@ const App = () => {
       navigate('/')
 
     } catch (exception) {
-      setErrorMessage('Invalid username or password')
+      setMessage('Invalid username or password')
       setTimeout(() => {
-        setErrorMessage(null)
+        setMessage(null)
       }, 5000)
     }
   }
@@ -58,9 +58,9 @@ const App = () => {
   const handleTimeout = () => {
     handleLogout()
     navigate('/login')
-    setErrorMessage('Session timed out. Please log in again.')
+    setMessage('Session timed out. Please log in again.')
     setTimeout(() => {
-      setErrorMessage(null)
+      setMessage(null)
     }, 5000)
   }
 
@@ -86,7 +86,7 @@ const App = () => {
               handleUsernameChange={({ target }) => setUsername(target.value)}
               handlePasswordChange={({ target }) => setPassword(target.value)}
               handleLogin={handleLogin}
-              errorMessage={errorMessage}
+              message={message}
             />
             : <Navigate replace to='/' />
           }

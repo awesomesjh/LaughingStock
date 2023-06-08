@@ -9,7 +9,7 @@ const Login = ({
   handleUsernameChange,
   handlePasswordChange,
   handleLogin,
-  errorMessage
+  message
 }) => {
   return (
     <main>
@@ -28,7 +28,7 @@ const Login = ({
           Login!
         </Button>
       </Form>
-      <Notification message={errorMessage} />
+      <Notification message={message} />
       <h2>Don't have an account? Sign up for one here!</h2>
       <Link to="/signup">Signup!</Link>
     </main>
