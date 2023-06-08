@@ -1,6 +1,7 @@
 import ReactECharts from 'echarts-for-react'
+import Navbar from './Navbar'
 
-const Candlestick = () => {
+const Candlestick = ({ user, handleLogout }) => {
   const upColor = '#ec0000';
   const upBorderColor = '#8A0000';
   const downColor = '#00da3c';
@@ -170,7 +171,15 @@ const Candlestick = () => {
       }
     ]
   }
-  return <ReactECharts option={option} />
+  return (
+    <div>
+      <Navbar
+        user={user}
+        handleLogout={handleLogout}
+      />
+      <ReactECharts option={option}/>
+    </div>
+  )
 }
 
 export default Candlestick

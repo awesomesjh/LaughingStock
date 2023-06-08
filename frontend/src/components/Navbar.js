@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Button from 'react-bootstrap/Button'
 import Container from 'react-bootstrap/Container'
 import Form from 'react-bootstrap/Form'
@@ -8,14 +8,10 @@ import NavDropdown from 'react-bootstrap/NavDropdown'
 import Offcanvas from 'react-bootstrap/Offcanvas'
 import styles from './Navbar.module.css'
 
-const Navibar = ({ user, handleLogout, stocks, trades }) => {
-  const navigate = useNavigate()
-  const data = {user, stocks, trades}
-
-  const sendData = () => {
-    navigate('/TestAnalysis', { state: { data } })
+const Navibar = ({ user, handleLogout }) => {
+  if (!user) {
+    return null
   }
-
   return (
     <>
       {[false].map((expand) => (
@@ -39,10 +35,9 @@ const Navibar = ({ user, handleLogout, stocks, trades }) => {
               </Offcanvas.Header>
               <Offcanvas.Body>
                 <Nav className="justify-content-end flex-grow-1 pe-3">
-                  <Nav.Link as={Link} to='/'>Home</Nav.Link>
-                  <Nav.Link
-                    onClick={sendData}
-                  >Analysis</Nav.Link>
+                  <Nav.Link as={Link} to='/'>Dashboard</Nav.Link>
+                  <Nav.Link as={Link} to='/piechart'>Pie Chart</Nav.Link>
+                  <Nav.Link as={Link} to='/candlestick'>Candlestick</Nav.Link>
                   <NavDropdown
                     title="Dropdown"
                     id={`offcanvasNavbarDropdown-expand-${expand}`}
