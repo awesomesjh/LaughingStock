@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Routes, Route, useNavigate, Navigate } from 'react-router-dom'
 import Main from './components/Main'
 import Signup from './components/Signup'
@@ -27,38 +27,50 @@ const App = () => {
 
   const navigate = useNavigate()
 
+  const handleLogout = () => {
+    stockService.clearToken()
+    window.localStorage.removeItem('loggedLaughingStockUser')
+    setUser(null)
+  }
+
+  const handleTimeout = useCallback(() => {
+    handleLogout()
+    navigate('/login')
+    setMessage('Session timed out. Please log in again.')
+    setTimeout(() => {
+      setMessage(null)
+    }, 5000)
+  }, [navigate])
+
+  const fetchStocks = useCallback(async () => {
+    try {
+      const response = await stockService.getAll()
+      const initialStocks = response.slice(0, -1)
+      const initialSortBy = response.pop()
+      setStocks(initialStocks)
+      setSortBy(initialSortBy)
+      const initialSymbols = initialStocks.map(s => s.symbol)
+      if (initialStocks.length) {
+        const latestTrades = await tradeService.getLatestTrades(initialSymbols)
+        setTrades(latestTrades)
+      }
+    } catch (error) {
+      if (error.response.data.error === 'token invalid') {
+        handleTimeout()
+      }
+    }
+  }, [handleTimeout])
+
   useEffect(() => {
+    console.log(5)
     const loggedUserJSON = window.localStorage.getItem('loggedLaughingStockUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
       stockService.setToken(user.token)
-      const fetchStocks = async () => {
-        try {
-          const response = await stockService.getAll()
-          const initialStocks = response.slice(0, -1)
-          const initialSortBy = response.pop()
-          setStocks(initialStocks)
-          setSortBy(initialSortBy)
-          const initialSymbols = initialStocks.map(s => s.symbol)
-          if (initialStocks.length) {
-            const latestTrades = await tradeService.getLatestTrades(initialSymbols)
-            setTrades(latestTrades)
-          }
-        } catch (error) {
-          if (error.response.data.error === 'token invalid') {
-            handleLogout()
-            navigate('/login')
-            setMessage('Session timed out. Please log in again.')
-            setTimeout(() => {
-              setMessage(null)
-            }, 5000)
-          }
-        }
-      }
       fetchStocks()
     }
-  }, [navigate])
+  }, [fetchStocks])
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -72,55 +84,16 @@ const App = () => {
       )
       setUser(user)
       setMessage(null)
-      const fetchStocks = async () => {
-        try {
-          const response = await stockService.getAll()
-          const initialStocks = response.slice(0, -1)
-          const initialSortBy = response.pop()
-          setStocks(initialStocks)
-          setSortBy(initialSortBy)
-          const initialSymbols = initialStocks.map(s => s.symbol)
-          if (initialStocks.length) {
-            const latestTrades = await tradeService.getLatestTrades(initialSymbols)
-            setTrades(latestTrades)
-          }
-        } catch (error) {
-          if (error.response.data.error === 'token invalid') {
-            handleLogout()
-            navigate('/login')
-            setMessage('Session timed out. Please log in again.')
-            setTimeout(() => {
-              setMessage(null)
-            }, 5000)
-          }
-        }
-      }
       fetchStocks()
       setUsername('')
       setPassword('')
       navigate('/')
-
     } catch (error) {
       setMessage('Invalid username or password')
       setTimeout(() => {
         setMessage(null)
       }, 5000)
     }
-  }
-
-  const handleLogout = () => {
-    stockService.clearToken()
-    window.localStorage.removeItem('loggedLaughingStockUser')
-    setUser(null)
-  }
-
-  const handleTimeout = () => {
-    handleLogout()
-    navigate('/login')
-    setMessage('Session timed out. Please log in again.')
-    setTimeout(() => {
-      setMessage(null)
-    }, 5000)
   }
 
   const checkLoggedIn = () => {
