@@ -2,10 +2,10 @@ import ReactECharts from 'echarts-for-react'
 import Navbar from './Navbar'
 
 const Candlestick = ({ user, handleLogout }) => {
-  const upColor = '#ec0000';
-  const upBorderColor = '#8A0000';
-  const downColor = '#00da3c';
-  const downBorderColor = '#008F28';
+  const upColor = '#ec0000'
+  const upBorderColor = '#8A0000'
+  const downColor = '#00da3c'
+  const downBorderColor = '#008F28'
   // Each item: open，close，lowest，highest
   const data0 = splitData([
     ['2013/1/24', 2320.26, 2320.26, 2287.3, 2362.94],
@@ -120,9 +120,6 @@ const Candlestick = ({ user, handleLogout }) => {
         type: 'cross'
       }
     },
-    legend: {
-      data: ['日K']
-    },
     grid: {
       left: '10%',
       right: '10%',
@@ -131,11 +128,9 @@ const Candlestick = ({ user, handleLogout }) => {
     xAxis: {
       type: 'category',
       data: data0.categoryData,
-      boundaryGap: false,
+      boundaryGap: true,
       axisLine: { onZero: false },
-      splitLine: { show: false },
-      min: 'dataMin',
-      max: 'dataMax'
+      splitLine: { show: false }
     },
     yAxis: {
       scale: true,
@@ -159,7 +154,7 @@ const Candlestick = ({ user, handleLogout }) => {
     ],
     series: [
       {
-        name: '日K',
+        name: 34343,
         type: 'candlestick',
         data: data0.values,
         itemStyle: {
@@ -177,7 +172,7 @@ const Candlestick = ({ user, handleLogout }) => {
         user={user}
         handleLogout={handleLogout}
       />
-      <ReactECharts option={option}/>
+      <ReactECharts option={option} style={{ height: '500px' }}/>
     </div>
   )
 }

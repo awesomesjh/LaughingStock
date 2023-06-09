@@ -40,7 +40,9 @@ const App = () => {
     setTimeout(() => {
       setMessage(null)
     }, 5000)
-  }, [navigate])
+    // Omit navigate from dependency array to prevent useEffect from running on navigate
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const fetchStocks = useCallback(async () => {
     try {
@@ -62,7 +64,6 @@ const App = () => {
   }, [handleTimeout])
 
   useEffect(() => {
-    console.log(5)
     const loggedUserJSON = window.localStorage.getItem('loggedLaughingStockUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
