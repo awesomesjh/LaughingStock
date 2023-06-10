@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { Routes, Route, useNavigate, Navigate } from 'react-router-dom'
+import { Routes, Route, useNavigate, Navigate, useLocation } from 'react-router-dom'
 import Main from './components/Main'
 import Signup from './components/Signup'
 import Login from './components/Login'
@@ -9,6 +9,7 @@ import NotFound from './components/NotFound'
 import loginService from './services/login'
 import stockService from './services/stocks'
 import tradeService from './services/trades'
+import barService from './services/bars'
 import userService from './services/users'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Container from 'react-bootstrap/Container'
@@ -25,7 +26,16 @@ const App = () => {
   const [sortBy, setSortBy] = useState(null)
   const [trades, setTrades] = useState({})
 
+  const [candlestickSymbol, setCandlestickSymbol] = useState(null)
+  const [candlestickData, setCandlestickData] = useState(null)
+  const [newCandlestickSymbol, setNewCandlestickSymbol] = useState('')
+  const [newCandlestickStart, setNewCandlestickStart] = useState('1')
+  const [loadingCandlestick, setLoadingCandlestick] = useState(false)
+  const [candlestickError, setCandlestickError] = useState(false)
+
   const navigate = useNavigate()
+
+  const location = useLocation()
 
   const handleLogout = () => {
     stockService.clearToken()
@@ -240,6 +250,51 @@ const App = () => {
     await userService.update(user.id, newObject)
   }
 
+  const handleNewCandlestickSymbolChange = (event) => {
+    setNewCandlestickSymbol(event.target.value)
+  }
+
+  const handleNewCandlestickStartChange = (event) => {
+    setNewCandlestickStart(event.target.value)
+  }
+
+  const fetchCandlestickData = async (event) => {
+    event.preventDefault()
+    try {
+      setLoadingCandlestick(true)
+      setCandlestickError(false)
+      const newCandlestickSymbolUpper = newCandlestickSymbol.toUpperCase()
+      const bars = await barService.getBars(newCandlestickSymbolUpper, newCandlestickStart)
+      if (!bars.length) {
+        throw new Error('invalid symbol')
+      }
+      const timestamps = []
+      const oclh = []
+      for (const bar of bars) {
+        timestamps.push(bar.Timestamp.slice(0, 10))
+        oclh.push([bar.OpenPrice, bar.ClosePrice, bar.LowPrice, bar.HighPrice])
+      }
+      setCandlestickSymbol(newCandlestickSymbolUpper)
+      setCandlestickData({ timestamps, oclh })
+    } catch (error) {
+      if (error.message === 'invalid symbol') {
+        setCandlestickError(true)
+        setCandlestickSymbol(null)
+        setCandlestickData(null)
+      }
+    }
+    setLoadingCandlestick(false)
+  }
+
+  // Remove candlestick error on navigate
+  useEffect(() => {
+    if (location.pathname !== '/candlestick' && candlestickError) {
+      setCandlestickError(false)
+      setNewCandlestickStart('1')
+      setNewCandlestickSymbol('')
+    }
+  }, [navigate, location.pathname, candlestickError])
+
   // Remove ghosting effect on refresh
   if (loggedIn && !stocks) {
     return null
@@ -302,7 +357,17 @@ const App = () => {
           element={loggedIn
             ? <Candlestick 
               user={user}
-              handleLogout={handleLogout} />
+              handleLogout={handleLogout}
+              candlestickSymbol={candlestickSymbol}
+              candlestickData={candlestickData}
+              newCandlestickSymbol={newCandlestickSymbol}
+              newCandlestickStart={newCandlestickStart}
+              handleNewCandlestickSymbolChange={handleNewCandlestickSymbolChange}
+              handleNewCandlestickStartChange={handleNewCandlestickStartChange}
+              fetchCandlestickData={fetchCandlestickData}
+              loading={loadingCandlestick}
+              error={candlestickError}
+            />
             : <Navigate replace to='/login' />
           }
         />

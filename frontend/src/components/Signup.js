@@ -49,7 +49,7 @@ const Signup = () => {
 			<h2>Sign up for Laughing Stock here!</h2>
 			
 			<Form onSubmit={handleSignup}>
-        <Form.Group className="mb-3" controlId="formName">
+        <Form.Group className="mb-3" controlId="formUsername">
           <Form.Label>Username</Form.Label>
           <Form.Control type="text" value={username} onChange={handleUsernameChange} placeholder="Enter Username" />
         </Form.Group>

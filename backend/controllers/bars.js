@@ -9,14 +9,16 @@ const alpaca = new Alpaca({
   paper: true,
 })
 
-router.get('/:symbol', async (req, res) => {
+router.get('/:symbol/:start', async (req, res) => {
   try {
     const symbol = req.params.symbol
+    const start = parseInt(req.params.start)
     const date = new Date() // date = current time
-    date.setFullYear(date.getFullYear() - 1) // date = current time - 1 year
+    date.setFullYear(date.getFullYear() - start) // date = current time - start years
     const options = {
       start: date,
-      timeframe: '1Day'
+      timeframe: '1Day',
+      adjustment: 'all'
     }
     const bars = []
     const response = alpaca.getBarsV2(symbol, options)

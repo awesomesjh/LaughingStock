@@ -15,7 +15,7 @@ const StockForm = ({
 }) => {
   return (
     <Form onSubmit={addStock}>
-      <Form.Group className='mb-3' controlId='formStock'>
+      <Form.Group className='mb-3' controlId='formSymbol'>
         <Form.Label>Symbol</Form.Label>
         <Form.Control 
           type='text'
