@@ -1,13 +1,5 @@
-const Alpaca = require('@alpacahq/alpaca-trade-api')
+const alpaca = require('../util/alpaca')
 const router = require('express').Router()
-
-const { API_KEY, API_SECRET } = require('../util/config')
-
-const alpaca = new Alpaca({
-  keyId: API_KEY,
-  secretKey: API_SECRET,
-  paper: true,
-})
 
 router.get('/:symbol/:start', async (req, res) => {
   try {

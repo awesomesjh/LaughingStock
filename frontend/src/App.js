@@ -11,6 +11,7 @@ import stockService from './services/stocks'
 import tradeService from './services/trades'
 import barService from './services/bars'
 import userService from './services/users'
+import sortStocks from './util/sortStocks'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Container from 'react-bootstrap/Container'
 
@@ -345,7 +346,7 @@ const App = () => {
           element={loggedIn
             ? <PieChart
               user={user}
-              stocks={stocks}
+              stocks={sortStocks([ ...stocks ], sortBy, trades)}
               trades={trades}
               handleLogout={handleLogout}
             />
