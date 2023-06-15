@@ -1,0 +1,100 @@
+.news-container {
+  display: flex;
+  width: 750px;
+  height: auto;
+  background-color: #f1f1f1;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin: auto;
+  margin-bottom: 15px;
+}
+
+.news-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.news-logo {
+  width: 40px;
+  height: 20px;
+  margin-bottom: 5px;
+}
+
+.news-title-date {
+  flex-grow: 1;
+  margin-right: 30px;
+}
+
+.news-title {
+  font-size: 20px;
+  margin: 0;
+}
+
+.news-title.hover {
+  text-decoration: underline;
+}
+
+.news-date {
+  color: #888;
+  margin: 0;
+}
+
+.news-content {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-grow: 1;
+}
+
+.news-image {
+  width: 100px;
+  height: 100px;
+  margin-left: auto;
+  position: relative;
+}
+
+.img {
+  border-radius: 4px;
+  width: 100px;
+  height: 100px;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  width: 16px; /* Adjust the width as needed */
+  height: auto; /* Maintain aspect ratio */
+  margin-right: 5px; /* Add spacing between logo and text */
+}
+
+.text {
+  font-size: 14px; /* Adjust the font size as needed */
+  white-space: nowrap; /* Ensure text stays on a single line */
+  overflow: visible;
+}
+
+.play-button-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0;
+  height: 0;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-left: 25px solid rgba(255, 255, 255, 0.7); /* Adjust transparency as needed */
+}
+
+
+.centered-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 85vh; /* Adjust the height based on your needs */
+}

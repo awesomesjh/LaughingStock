@@ -38,6 +38,7 @@ const Navibar = ({ user, handleLogout }) => {
                   <Nav.Link as={Link} to='/'>Dashboard</Nav.Link>
                   <Nav.Link as={Link} to='/piechart'>Pie Chart</Nav.Link>
                   <Nav.Link as={Link} to='/candlestick'>Candlestick</Nav.Link>
+                  <Nav.Link as={Link} to='/news'>News</Nav.Link>
                   <NavDropdown
                     title="Dropdown"
                     id={`offcanvasNavbarDropdown-expand-${expand}`}
