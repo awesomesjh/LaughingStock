@@ -1,4 +1,4 @@
-.news-container {
+.articleContainer {
   display: flex;
   width: 750px;
   height: auto;
@@ -10,46 +10,63 @@
   margin-bottom: 15px;
 }
 
-.news-header {
+.logoTitleDateContainer {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   margin-bottom: 10px;
 }
 
-.news-logo {
+.logoContainer {
   width: 40px;
   height: 20px;
   margin-bottom: 5px;
 }
 
-.news-title-date {
+.logoSourceContainer {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  width: 16px; /* Adjust the width as needed */
+  height: auto; /* Maintain aspect ratio */
+  margin-right: 5px; /* Add spacing between logo and text */
+}
+
+.source {
+  font-size: 14px; /* Adjust the font size as needed */
+  white-space: nowrap; /* Ensure text stays on a single line */
+  overflow: visible;
+}
+
+.titleDateContainer {
   flex-grow: 1;
   margin-right: 30px;
 }
 
-.news-title {
+.title {
   font-size: 20px;
   margin: 0;
 }
 
-.news-title.hover {
+.title.hover {
   text-decoration: underline;
 }
 
-.news-date {
+.date {
   color: #888;
   margin: 0;
 }
 
-.news-content {
+.imgParentContainer {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   flex-grow: 1;
 }
 
-.news-image {
+.imgChildContainer {
   width: 100px;
   height: 100px;
   margin-left: auto;
@@ -62,24 +79,7 @@
   height: 100px;
 }
 
-.logo-container {
-  display: flex;
-  align-items: center;
-}
-
-.logo {
-  width: 16px; /* Adjust the width as needed */
-  height: auto; /* Maintain aspect ratio */
-  margin-right: 5px; /* Add spacing between logo and text */
-}
-
-.text {
-  font-size: 14px; /* Adjust the font size as needed */
-  white-space: nowrap; /* Ensure text stays on a single line */
-  overflow: visible;
-}
-
-.play-button-overlay {
+.playButtonOverlay {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -89,12 +89,4 @@
   border-top: 15px solid transparent;
   border-bottom: 15px solid transparent;
   border-left: 25px solid rgba(255, 255, 255, 0.7); /* Adjust transparency as needed */
-}
-
-
-.centered-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 85vh; /* Adjust the height based on your needs */
 }

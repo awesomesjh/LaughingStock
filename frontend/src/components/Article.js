@@ -1,11 +1,10 @@
 import { useState } from 'react'
-import './Article.css'
+import styles from './Article.module.css'
 
 const Article = ({ article }) => {
   const [hover, setHover] = useState(false)
 
   const handleImageError = (event) => {
-    console.log(event.target)
     event.target.style.display = 'none'
   }
 
@@ -24,26 +23,42 @@ const Article = ({ article }) => {
   }
 
   return (
-    <div className="news-container" onClick={handleClick} onMouseEnter={(event) => handleMouseEnter(event)} onMouseLeave={(event) => handleMouseLeave(event)}>
-      <div className="news-header">
-        <div className="news-logo">
+    <div 
+      className={styles.articleContainer}
+      onClick={handleClick}
+      onMouseEnter={(event) => handleMouseEnter(event)}
+      onMouseLeave={(event) => handleMouseLeave(event)}
+    >
+      <div className={styles.logoTitleDateContainer}>
+        <div className={styles.logoContainer}>
           {article.logo.slice(0, 17) === 'https://encrypted'
-            ? <div className="logo-container">
-                <img src={article.logo} className="logo" alt="logo" />
-                <span className="text">{article.source}</span>
+            ? <div className={styles.logoSourceContainer}>
+                <img className={styles.logo} src={article.logo} alt='logo'/>
+                <span className={styles.source}>{article.source}</span>
               </div>
-            : <img src={article.logo} alt='logo'></img>
+            : <img src={article.logo} alt='logo'/>
           }
         </div>
-        <div className="news-title-date">
-          <h2 className={`news-title ${hover ? 'hover' : ''}`}>{article.title}</h2>
-          <p className="news-date">{article.time}</p>
+        <div className={styles.titleDateContainer}>
+          <h2 className={`${styles.title} ${hover ? styles.hover : ''}`}>{article.title}</h2>
+          <p className={styles.date}>{article.date}</p>
         </div>
       </div>
-      <div className="news-content">
-        <div className="news-image">
-          {article.img ? <img className='img' src={article.img} alt='' onError={(event) => handleImageError(event)}></img> : null}
-          {article.img && article.img.slice(0, 23) === 'https://img.youtube.com' ? <div className="play-button-overlay"></div> : null}
+      <div className={styles.imgParentContainer}>
+        <div className={styles.imgChildContainer}>
+          {article.img
+            ? <img 
+                className={styles.img}
+                src={article.img}
+                alt=''
+                onError={(event) => handleImageError(event)}
+              />
+            : null
+          }
+          {article.img && article.img.slice(0, 23) === 'https://img.youtube.com'
+            ? <div className={styles.playButtonOverlay}></div>
+            : null
+          }
         </div>
       </div>
     </div>

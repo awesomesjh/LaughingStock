@@ -1,6 +1,7 @@
 import Navbar from './Navbar'
 import Article from './Article'
-import LoadingCandlestick from './LoadingCandlestick'
+import LoadingCaption from './LoadingCaption'
+import styles from './News.module.css'
 
 const News = ({ user, handleLogout, news }) => {  
   return (
@@ -18,7 +19,9 @@ const News = ({ user, handleLogout, news }) => {
               />
             )}
           </div>
-        : <div className='centered-container'><LoadingCandlestick /></div>
+        : <div className={styles.container}>
+            <LoadingCaption />
+          </div>
       }
     </div>
   )

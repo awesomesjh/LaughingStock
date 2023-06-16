@@ -16,6 +16,7 @@ import userService from './services/users'
 import sortStocks from './util/sortStocks'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Container from 'react-bootstrap/Container'
+import './styles.css'
 
 const App = () => {
   const [username, setUsername] = useState('')

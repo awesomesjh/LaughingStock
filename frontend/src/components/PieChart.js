@@ -3,6 +3,8 @@ import { Pie } from 'react-chartjs-2'
 // https://www.chartjs.org/docs/latest/getting-started/integration.html
 import 'chart.js/auto'
 import Navbar from './Navbar'
+import LoadingCaption from './LoadingCaption'
+import styles from './PieChart.module.css'
 
 const PieChart = ({ user, stocks, trades, handleLogout }) => {
   const totalPrice = stocks.map((stock) => trades[stock.symbol] ? trades[stock.symbol].Price * stock.quantity : null)
@@ -41,12 +43,14 @@ const PieChart = ({ user, stocks, trades, handleLogout }) => {
         user={user}
         handleLogout={handleLogout}
       />
-      <div style={{ width: 500 }}>
-        {loading 
-          ? <p style={{ marginLeft: '10px' }}>Loading price data...</p> 
+      <div className={styles.container}>
+        {loading
+          ? <LoadingCaption />
           : stocks.length
-          ? <Pie data={data} />
-          : <p style={{ marginLeft: '10px' }}>No stocks found. Add some stocks to view pie chart.</p>}
+          ? <div className={styles.size}>
+              <Pie data={data} />
+            </div>
+          : <p>No stocks found. Add some stocks to view pie chart.</p>}
       </div>
     </div>
   )

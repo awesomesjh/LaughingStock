@@ -1,4 +1,4 @@
-import LoadingCandlestick from './LoadingCandlestick'
+import LoadingCaption from './LoadingCaption'
 import styles from './PlaceholderCandlestick.module.css'
 
 const PlaceholderCandlestick = ({ loading, error }) => {
@@ -6,7 +6,7 @@ const PlaceholderCandlestick = ({ loading, error }) => {
     <div className={styles.container}>
       <div className={styles.content}>
         {loading
-          ? <LoadingCandlestick />
+          ? <LoadingCaption />
           : error
           ? 'Stock not found. Please enter a valid symbol.'
           : 'Enter a symbol to begin using candlestick chart.'

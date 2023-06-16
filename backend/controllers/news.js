@@ -32,7 +32,7 @@ router.get('/:symbols', async (req, res) => {
       const relativeLink = await article.locator('a').first().getAttribute('href')
       const link = baseUrl + relativeLink.substring(1) // absolute link
 
-      const time = await article.locator('time').innerText()
+      const date = await article.locator('time').innerText()
 
       const firstdiv = article.locator('div').first()
       const logo = await firstdiv.locator('img').first().getAttribute('src')
@@ -49,7 +49,7 @@ router.get('/:symbols', async (req, res) => {
         }
       }
 
-      responseArray.push({ title, link, time, logo, source, img })
+      responseArray.push({ title, link, date, logo, source, img })
     }
     
     await browser.close()
