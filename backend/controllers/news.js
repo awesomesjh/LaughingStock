@@ -1,5 +1,4 @@
-// const alpaca = require('../util/alpaca')
-const { chromium } = require('playwright')
+const { webkit } = require('playwright')
 const router = require('express').Router()
 
 const baseUrl = 'https://news.google.com'
@@ -19,7 +18,7 @@ router.get('/:symbols', async (req, res) => {
 
     const responseArray = []
     
-    const browser = await chromium.launch({ headless: true })
+    const browser = await webkit.launch({ headless: true })
     const page = await browser.newPage()
     // Navigate to a website 
     await page.goto(`${baseUrl}/search?for=${query}&hl=en-US&gl=US&ceid=US:en`)
@@ -28,16 +27,16 @@ router.get('/:symbols', async (req, res) => {
     const articles = await page.locator('article').all()
 
     for (const article of articles) {
-      const title = await article.locator('h3').locator('a').innerHTML()
+      const title = await article.locator('h3').locator('a').innerText()
       
       const relativeLink = await article.locator('a').first().getAttribute('href')
       const link = baseUrl + relativeLink.substring(1) // absolute link
 
-      const time = await article.locator('time').innerHTML()
+      const date = await article.locator('time').innerText()
 
       const firstdiv = article.locator('div').first()
       const logo = await firstdiv.locator('img').first().getAttribute('src')
-      const source = await firstdiv.locator('a').innerHTML()
+      const source = await firstdiv.locator('a').innerText()
 
       let img = null
       if (await article.locator('figure').count()) {
@@ -50,7 +49,7 @@ router.get('/:symbols', async (req, res) => {
         }
       }
 
-      responseArray.push({ title, link, time, logo, source, img })
+      responseArray.push({ title, link, date, logo, source, img })
     }
     
     await browser.close()
@@ -60,20 +59,5 @@ router.get('/:symbols', async (req, res) => {
     return res.status(400).json({ error })
   }
 })
-
-/*
-router.get('/:symbols', async (req, res) => {
-  try {
-    const symbols = req.params.symbols.split(',')
-    const news = await alpaca.getNews({
-      symbols,
-      totalLimit: 10,
-    })
-    res.json(news)
-  } catch (error) {
-    return res.status(400).json({ error })
-  }
-})
-*/
 
 module.exports = router

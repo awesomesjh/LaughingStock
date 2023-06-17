@@ -5,15 +5,18 @@ import Signup from './components/Signup'
 import Login from './components/Login'
 import PieChart from './components/PieChart'
 import Candlestick from './components/Candlestick'
+import News from './components/News'
 import NotFound from './components/NotFound'
 import loginService from './services/login'
 import stockService from './services/stocks'
 import tradeService from './services/trades'
 import barService from './services/bars'
+import newsService from './services/news'
 import userService from './services/users'
 import sortStocks from './util/sortStocks'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Container from 'react-bootstrap/Container'
+import './styles.css'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -34,6 +37,8 @@ const App = () => {
   const [loadingCandlestick, setLoadingCandlestick] = useState(false)
   const [candlestickError, setCandlestickError] = useState(false)
 
+  const [news, setNews] = useState(null)
+
   const navigate = useNavigate()
 
   const location = useLocation()
@@ -42,6 +47,15 @@ const App = () => {
     stockService.clearToken()
     window.localStorage.removeItem('loggedLaughingStockUser')
     setUser(null)
+    // Reset to initial state
+    setNewSymbol('')
+    setNewQuantity('')
+    setStocks(null)
+    setSortBy(null)
+    setTrades({})
+    setCandlestickSymbol(null)
+    setCandlestickData(null)
+    setNews(null)
   }
 
   const handleTimeout = useCallback(() => {
@@ -66,6 +80,13 @@ const App = () => {
       if (initialStocks.length) {
         const latestTrades = await tradeService.getLatestTrades(initialSymbols)
         setTrades(latestTrades)
+      }
+      if (initialStocks.length) {
+        const latestNews = await newsService.getNews(initialSymbols)
+        setNews(latestNews)
+      } else {
+        const latestNews = await newsService.getNewsNull()
+        setNews(latestNews)
       }
     } catch (error) {
       if (error.response.data.error === 'token invalid') {
@@ -350,7 +371,7 @@ const App = () => {
               trades={trades}
               handleLogout={handleLogout}
             />
-            : <Navigate replace to='/login' />
+            : <Navigate replace to='/' />
           }
         />
         <Route
@@ -369,7 +390,18 @@ const App = () => {
               loading={loadingCandlestick}
               error={candlestickError}
             />
-            : <Navigate replace to='/login' />
+            : <Navigate replace to='/' />
+          }
+        />
+        <Route
+          path='/news'
+          element={loggedIn
+            ? <News
+              user={user}
+              handleLogout={handleLogout}
+              news={news}
+            />
+            : <Navigate replace to='/' />
           }
         />
         <Route path='*' element={<NotFound />} />

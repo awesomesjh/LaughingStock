@@ -6,6 +6,11 @@ const getNews = async symbols => {
   return response.data
 }
 
-const newsService = { getNews }
+const getNewsNull = async () => {
+  const response = await axios.get(`${ baseUrl }/null`)
+  return response.data
+}
+
+const newsService = { getNews, getNewsNull }
 
 export default newsService

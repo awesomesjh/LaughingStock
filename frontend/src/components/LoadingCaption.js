@@ -1,6 +1,6 @@
-import styles from './LoadingCandlestick.module.css'
+import styles from './LoadingCaption.module.css'
 
-const LoadingCandlestick = () => {
+const LoadingCaption = () => {
   return (
     <div className={styles.container}>
       <div className={styles.spinner}></div>
@@ -9,4 +9,4 @@ const LoadingCandlestick = () => {
   )
 }
 
-export default LoadingCandlestick
+export default LoadingCaption
