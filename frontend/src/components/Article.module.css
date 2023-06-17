@@ -38,6 +38,7 @@
   font-size: 14px; /* Adjust the font size as needed */
   white-space: nowrap; /* Ensure text stays on a single line */
   overflow: visible;
+  display: none;
 }
 
 .titleDateContainer {

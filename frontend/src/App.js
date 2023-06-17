@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { Routes, Route, useNavigate, Navigate, useLocation } from 'react-router-dom'
 import Main from './components/Main'
 import Signup from './components/Signup'
@@ -14,6 +14,7 @@ import barService from './services/bars'
 import newsService from './services/news'
 import userService from './services/users'
 import sortStocks from './util/sortStocks'
+import setsEqual from './util/setsEqual'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Container from 'react-bootstrap/Container'
 import './styles.css'
@@ -38,12 +39,15 @@ const App = () => {
   const [candlestickError, setCandlestickError] = useState(false)
 
   const [news, setNews] = useState(null)
+  const [newsSymbols, setNewsSymbols] = useState(new Set())
+  const [checkingValidSymbol, setCheckingValidSymbol] = useState(false)
+  const [fetchingNews, setFetchingNews] = useState(false)
 
   const navigate = useNavigate()
 
   const location = useLocation()
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     stockService.clearToken()
     window.localStorage.removeItem('loggedLaughingStockUser')
     setUser(null)
@@ -56,7 +60,8 @@ const App = () => {
     setCandlestickSymbol(null)
     setCandlestickData(null)
     setNews(null)
-  }
+    setNewsSymbols(new Set())
+  }, [])
 
   const handleTimeout = useCallback(() => {
     handleLogout()
@@ -69,6 +74,27 @@ const App = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const fetchTrades = async (symbols) => {
+    if (symbols.length) {
+      const latestTrades = await tradeService.getLatestTrades(symbols)
+      setTrades(latestTrades)
+    }
+  }
+
+  const fetchNews = useCallback(async(symbols) => {
+    setFetchingNews(true)
+    if (symbols.length) {
+      const latestNews = await newsService.getNews(symbols)
+      setNews(latestNews)
+      setNewsSymbols(new Set(symbols))
+    } else {
+      const latestNews = await newsService.getNewsNull()
+      setNews(latestNews)
+      setNewsSymbols(new Set())
+    }
+    setFetchingNews(false)
+  }, [])
+
   const fetchStocks = useCallback(async () => {
     try {
       const response = await stockService.getAll()
@@ -77,23 +103,14 @@ const App = () => {
       setStocks(initialStocks)
       setSortBy(initialSortBy)
       const initialSymbols = initialStocks.map(s => s.symbol)
-      if (initialStocks.length) {
-        const latestTrades = await tradeService.getLatestTrades(initialSymbols)
-        setTrades(latestTrades)
-      }
-      if (initialStocks.length) {
-        const latestNews = await newsService.getNews(initialSymbols)
-        setNews(latestNews)
-      } else {
-        const latestNews = await newsService.getNewsNull()
-        setNews(latestNews)
-      }
+      fetchTrades(initialSymbols)
+      fetchNews(initialSymbols)
     } catch (error) {
       if (error.response.data.error === 'token invalid') {
         handleTimeout()
       }
     }
-  }, [handleTimeout])
+  }, [handleTimeout, fetchNews])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedLaughingStockUser')
@@ -164,6 +181,7 @@ const App = () => {
         const updatedStock = await stockService.update(stock.id, newObject)
         setStocks(stocks.map(s => s.id !== stock.id ? s : updatedStock))
       } else {
+        setCheckingValidSymbol(true)
         const newObject = {
           symbol: newSymbolUpper,
           quantity: newQuantity
@@ -177,9 +195,11 @@ const App = () => {
           await stockService.remove(newStock.id)
           const filteredStocks = newStocks.filter(stock => stock.id !== newStock.id)
           setStocks(filteredStocks)
+          setCheckingValidSymbol(false)
           throw new Error('invalid symbol')
         }
         setTrades(latestTrades)
+        setCheckingValidSymbol(false)
       }
       setNewSymbol('')
       setNewQuantity('')
@@ -317,6 +337,20 @@ const App = () => {
     }
   }, [navigate, location.pathname, candlestickError])
 
+  const newsUpdated = useMemo(() => {
+    if (stocks) {
+      return setsEqual(newsSymbols, new Set(stocks.map(s => s.symbol)))
+    }
+    return null
+  }, [newsSymbols, stocks])
+
+  const currentSymbols = useMemo(() => {
+    if (stocks) {
+      return new Set(stocks.map(s => s.symbol))
+    }
+    return null
+  }, [stocks])
+
   // Remove ghosting effect on refresh
   if (loggedIn && !stocks) {
     return null
@@ -400,6 +434,11 @@ const App = () => {
               user={user}
               handleLogout={handleLogout}
               news={news}
+              newsUpdated={newsUpdated}
+              currentSymbols={currentSymbols}
+              fetchNews={fetchNews}
+              checkingValidSymbol={checkingValidSymbol}
+              fetchingNews={fetchingNews}
             />
             : <Navigate replace to='/' />
           }

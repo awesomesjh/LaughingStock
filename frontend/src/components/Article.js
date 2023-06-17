@@ -1,8 +1,11 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import styles from './Article.module.css'
 
 const Article = ({ article }) => {
   const [hover, setHover] = useState(false)
+  
+  const logoSourceRef = useRef()
+  const sourceRef = useRef()
 
   const handleImageError = (event) => {
     event.target.style.display = 'none'
@@ -22,6 +25,20 @@ const Article = ({ article }) => {
     event.target.style.cursor = 'default'
   }
 
+  const handleLogoError = (event) => {
+    event.target.style.display = 'none'
+    sourceRef.current.style.display = 'block'
+  }
+
+  const handleLogoLoad = (event) => {
+    if (article.logo.slice(0, 17) === 'https://encrypted') {
+      sourceRef.current.style.display = 'block'
+    } else {
+      logoSourceRef.current.style.display = 'contents'
+      event.target.style.all = 'unset'
+    }
+  }
+
   return (
     <div 
       className={styles.articleContainer}
@@ -31,13 +48,16 @@ const Article = ({ article }) => {
     >
       <div className={styles.logoTitleDateContainer}>
         <div className={styles.logoContainer}>
-          {article.logo.slice(0, 17) === 'https://encrypted'
-            ? <div className={styles.logoSourceContainer}>
-                <img className={styles.logo} src={article.logo} alt='logo'/>
-                <span className={styles.source}>{article.source}</span>
-              </div>
-            : <img src={article.logo} alt='logo'/>
-          }
+          <div className={styles.logoSourceContainer} ref={logoSourceRef}>
+            <img
+              className={styles.logo}
+              src={article.logo}
+              alt='logo'
+              onError={(event) => handleLogoError(event)}
+              onLoad={(event) => handleLogoLoad(event)}
+            />
+            <span className={styles.source} ref={sourceRef}>{article.source}</span>
+          </div>
         </div>
         <div className={styles.titleDateContainer}>
           <h2 className={`${styles.title} ${hover ? styles.hover : ''}`}>{article.title}</h2>
