@@ -78,7 +78,7 @@ bot.onText(/\/getnews/, (msg) => {
 });
 
 bot.on('message', (msg) => {
-  // Handle incoming messages
+  // Handle incoming messages used for debugging
   // console.log(msg);
 });
 
@@ -122,27 +122,32 @@ const fetchStocks = async (config, chat_id, username) => {
 }
 
 async function getSymbolChange(chat_id){
-  for (let i = 0; i < DATA.length; i += 1) {
-    const symbol = DATA[i].symbol
-
-    let bars = alpaca.getBarsV2(
-      symbol,
-      {
-        start: moment().subtract(7, "days").format(),
-        end: moment().subtract(20, "minutes").format(),
-        timeframe: "1Day",
-      },
-      alpaca.configuration
-    );
-    const barset = [];
-    
-    for await (let b of bars) {
-      barset.push(b);
+  try{
+    for (let i = 0; i < DATA.length; i += 1) {
+      const symbol = DATA[i].symbol
+  
+      let bars = alpaca.getBarsV2(
+        symbol,
+        {
+          start: moment().subtract(7, "days").format(),
+          end: moment().subtract(20, "minutes").format(),
+          timeframe: "1Day",
+        },
+        alpaca.configuration
+      );
+      const barset = [];
+      
+      for await (let b of bars) {
+        barset.push(b);
+      }
+      
+      const week_open = barset[0].OpenPrice;
+      const week_close = barset.slice(-1)[0].ClosePrice;
+      const percent_change = ((week_close - week_open) / week_open) * 100;
+      bot.sendMessage(chat_id, `${symbol} moved ${percent_change.toFixed(3)}% over the last 7 days`);
     }
-    
-    const week_open = barset[0].OpenPrice;
-    const week_close = barset.slice(-1)[0].ClosePrice;
-    const percent_change = ((week_close - week_open) / week_open) * 100;
-    bot.sendMessage(chat_id, `${symbol} moved ${percent_change.toFixed(3)}% over the last 7 days`);
   }
+  catch (error) {
+    bot.sendMessage(chat_id, "Unable to get symbol data changes");
+  } 
 }
