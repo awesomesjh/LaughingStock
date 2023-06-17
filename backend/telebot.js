@@ -2,7 +2,6 @@ const moment = require('moment');
 const axios = require('axios')
 const loginURL = "http://localhost:3001/api/login"
 const stockURL = "http://localhost:3001/api/stocks"
-const alpacaURL = "https://data.alpaca.markets/v1"
 const telegramBot = require('node-telegram-bot-api')
 
 // get environment variables
