@@ -5,17 +5,15 @@ const moment = require('moment')
 const { TELEGRAM_BOT_TOKEN } = require('./util/config')
 const alpaca = require('./util/alpaca')
 
-const loginURL = '/api/login'
-const stocksURL = '/api/stocks'
+const loginURL = '/api/telegram/login'
+const stocksURL = '/api/telegram/stocks'
+const logoutURL = '/api/telegram/logout'
 
 const proxy = {
   protocol: 'http',
   host: 'localhost',
   port: 3001,
 }
-
-// will be null when the user is not logged in
-var DATA = null
 
 const bot = new telegramBot(TELEGRAM_BOT_TOKEN, { polling: true })
 
@@ -38,45 +36,45 @@ bot.onText(/\/login/, (msg) => {
   // Handle the /login command
   console.log('Received /login command')
   const chat_id = msg.chat.id
-  if (DATA === null) {
-    bot.sendMessage(chat_id, 'Key in your username and password with a space between them. E.g "Example 12345"')
-    
-    bot.once('message', (nextMsg) => {
-      // Retrieve the user input from the next message
-      const userInput = nextMsg.text.trim()
+  bot.sendMessage(chat_id, 'Key in your username and password with a space between them. E.g "Example 12345"')
+  
+  bot.once('message', (nextMsg) => {
+    // Retrieve the user input from the next message
+    const userInput = nextMsg.text.trim()
 
-      // Validate the user input format
-      if (!validateInput(userInput)) {
-        const errorMessage = 'Incorrect login credentials. Please /login again'
-        bot.sendMessage(chat_id, errorMessage)
-        return
-      }
-      const credentials_array = userInput.split(' ')
-      const username = credentials_array[0]
-      const password = credentials_array[1]
-      handleLogin(username, password, chat_id)
-    })
-  }
-  else {
-    bot.sendMessage(chat_id, 'You are already logged in')
-  }
+    // Validate the user input format
+    if (!validateInput(userInput)) {
+      const errorMessage = 'Incorrect login credentials. Please /login again'
+      bot.sendMessage(chat_id, errorMessage)
+      return
+    }
+    const credentials_array = userInput.split(' ')
+    const username = credentials_array[0]
+    const password = credentials_array[1]
+    const credentials = { username, password, id: nextMsg.from.id }
+    handleLogin(credentials, chat_id)
+  })
 })
 
-bot.onText(/\/getnews/, (msg) => {
-  // Handle the /getnews command
-  console.log('Received /getnews command')
+// checks with backend login credentials
+const handleLogin = async (credentials, chat_id) => {
+  try {
+    const response = await axios.post(loginURL, credentials, { proxy })
+    const user = response.data
+    const message = `Welcome ${user.username}`
+    bot.sendMessage(chat_id, message)
+  } catch (error) {
+    const errorMessage = 'Incorrect login credentials. Please /login again'
+    bot.sendMessage(chat_id, errorMessage)
+  }
+}
+
+bot.onText(/\/logout/, (msg) => {
+  // Handle the /login command
+  console.log('Received /logout command')
   const chat_id = msg.chat.id
-  if (DATA === null) {
-    bot.sendMessage(chat_id, 'Please login first at /login')
-  }
-  else {
-    getSymbolChange(chat_id)
-  }
-})
-
-bot.on('message', (msg) => {
-  // Handle incoming messages used for debugging
-  // console.log(msg)
+  const tele_id = msg.from.id
+  handleLogout(chat_id, tele_id)
 })
 
 // Validate the user input format for login
@@ -85,44 +83,31 @@ const validateInput = (input) => {
   return words.length === 2
 }
 
-// checks with backend login credentials
-const handleLogin = async (username, password, chat_id) => {
-  credentials = { username, password }
+const handleLogout = async (chat_id, tele_id) => {
   try {
-    const response = await axios.post(loginURL, credentials, { proxy })
-    const user = response.data
-    const token = `Bearer ${user.token}`
-    const config = {
-      headers: { Authorization: token },
-      proxy
-    }
-    fetchStocks(config, chat_id, username)
-  }
-  catch (error) {
-    const errorMessage = 'Incorrect login credentials. Please /login again'
-    bot.sendMessage(chat_id, errorMessage)
-  }
-}
-
-const fetchStocks = async (config, chat_id, username) => {
-  try {
-    const response = await axios.get(stocksURL, config)
-    const data = response.data
-    data.pop()
-    DATA = data
-    const message = `Welcome ${username}`
+    await axios.delete(`${logoutURL}/${tele_id}`, { proxy })
+    const message = 'Logout successful'
     bot.sendMessage(chat_id, message)
-  }
-  catch (error) {
-    const errorMessage = 'Incorrect login credentials. Please /login again'
+  } catch (error) {
+    const errorMessage = 'Logout failed'
     bot.sendMessage(chat_id, errorMessage)
   }
 }
 
-const getSymbolChange = async (chat_id) => {
+bot.onText(/\/getnews/, (msg) => {
+  // Handle the /getnews command
+  console.log('Received /getnews command')
+  const chat_id = msg.chat.id
+  const tele_id = msg.from.id
+  getSymbolChange(chat_id, tele_id)
+})
+
+const getSymbolChange = async (chat_id, tele_id) => {
   try{
-    for (let i = 0; i < DATA.length; i += 1) {
-      const symbol = DATA[i].symbol
+    const response = await axios.get(`${stocksURL}/${tele_id}`, { proxy })
+    const stocks = response.data
+    for (let i = 0; i < stocks.length; i += 1) {
+      const symbol = stocks[i].symbol
       
       let bars = alpaca.getBarsV2(
         symbol,
@@ -146,6 +131,15 @@ const getSymbolChange = async (chat_id) => {
     }
   }
   catch (error) {
-    bot.sendMessage(chat_id, 'Unable to get symbol data changes')
+    if (error.response.data.error === 'user not logged in') {
+      bot.sendMessage(chat_id, 'Please login first at /login')
+    } else {
+      bot.sendMessage(chat_id, 'Unable to get symbol data changes')
+    }
   } 
 }
+
+bot.on('message', (msg) => {
+  // Handle incoming messages used for debugging
+  // console.log(msg)
+})

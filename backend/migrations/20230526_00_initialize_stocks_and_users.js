@@ -38,7 +38,18 @@ module.exports = {
         allowNull: false,
       },
     })
+    await queryInterface.createTable('teleusers', {
+      id: {
+        type: DataTypes.BIGINT,
+        primaryKey: true,
+      }
+    })
     await queryInterface.addColumn('stocks', 'user_id', {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: { model: 'users', key: 'id' },
+    })
+    await queryInterface.addColumn('teleusers', 'user_id', {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: { model: 'users', key: 'id' },
@@ -47,5 +58,6 @@ module.exports = {
   down: async ({ context: queryInterface }) => {
     await queryInterface.dropTable('stocks')
     await queryInterface.dropTable('users')
+    await queryInterface.dropTable('teleusers')
   },
 }
