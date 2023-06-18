@@ -19,9 +19,6 @@ const clearToken = () => {
 
 const getAll = async () => {
   const response = await axios.get(baseUrl, config)
-  console.log(baseUrl)
-  console.log(config)
-  console.log(response)
   return response.data
 }
 

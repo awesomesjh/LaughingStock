@@ -81,7 +81,7 @@ const App = () => {
     }
   }
 
-  const fetchNews = useCallback(async(symbols) => {
+  const fetchNews = useCallback(async (symbols) => {
     setFetchingNews(true)
     if (symbols.length) {
       const latestNews = await newsService.getNews(symbols)
