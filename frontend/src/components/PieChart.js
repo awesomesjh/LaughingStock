@@ -6,7 +6,7 @@ import Navbar from './Navbar'
 import LoadingCaption from './LoadingCaption'
 import styles from './PieChart.module.css'
 
-const PieChart = ({ user, stocks, trades, handleLogout }) => {
+const PieChart = ({ user, handleLogout, stocks, trades }) => {
   const totalPrice = stocks.map((stock) => trades[stock.symbol] ? trades[stock.symbol].Price * stock.quantity : null)
 
   const data = {

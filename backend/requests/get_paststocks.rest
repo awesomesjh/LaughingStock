@@ -1,0 +1,2 @@
+GET http://localhost:3001/api/paststocks
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im51bWJlcnMiLCJpZCI6MSwiaWF0IjoxNjg3MzUxNjA1LCJleHAiOjM3Njg3MzUxNjA1fQ.bj2m45YQpJ4DDgDSXFaOhCSgQ0nU-UNdVhF6RywXIlU

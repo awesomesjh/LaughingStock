@@ -1,0 +1,18 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tableContainer {
+  width: 1000px;
+}
+
+.caption {
+  caption-side: top;
+  text-align: center;
+}
+
+.th {
+  width: 25%;
+}

@@ -32,6 +32,7 @@ const Navibar = ({ user, handleLogout }) => {
                 <Nav className='justify-content-end flex-grow-1 pe-3'>
                   <Nav.Link as={Link} to='/'>Dashboard</Nav.Link>
                   <Nav.Link as={Link} to='/piechart'>Pie Chart</Nav.Link>
+                  <Nav.Link as={Link} to='/line'>Line</Nav.Link>
                   <Nav.Link as={Link} to='/candlestick'>Candlestick</Nav.Link>
                   <Nav.Link as={Link} to='/news'>News</Nav.Link>
                 </Nav>

@@ -1,0 +1,13 @@
+.svg {
+  width: 16px;
+  height: 16px;
+}
+
+.green {
+  fill: #00a000;
+}
+
+.red {
+  fill: #ff0000;
+  transform: rotate(180deg);
+}

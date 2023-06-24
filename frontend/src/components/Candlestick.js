@@ -24,7 +24,7 @@ const Candlestick = ({
   const option = !candlestickData ? null : {
     title: {
       text: candlestickSymbol,
-      left: 0
+      left: 'center'
     },
     tooltip: {
       trigger: 'axis',
@@ -83,7 +83,7 @@ const Candlestick = ({
         handleLogout={handleLogout}
       />
       {!loading && !error && candlestickData
-        ? <ReactECharts option={option} style={{ height: '500px' }}/>
+        ? <ReactECharts option={option} style={{ height: '500px' }} />
         : <PlaceholderCandlestick loading={loading} error={error} />
       }
       <CandlestickForm

@@ -37,6 +37,11 @@ const remove = async (id) => {
   return response.data
 }
 
-const stockService = { getAll, create, update, remove, setToken, clearToken }
+const getPastStocks = async () => {
+  const response = await axios.get('/api/paststocks', config)
+  return response.data
+}
+
+const stockService = { getAll, create, update, remove, setToken, clearToken, getPastStocks }
 
 export default stockService

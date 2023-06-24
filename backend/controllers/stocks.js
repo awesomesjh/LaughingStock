@@ -13,7 +13,7 @@ const tokenExtractor = (req, res, next) => {
     } catch {
       return res.status(401).json({ error: 'token invalid' })
     }
-  }  else {
+  } else {
     return res.status(401).json({ error: 'token missing' })
   }
   next()
@@ -22,6 +22,12 @@ const tokenExtractor = (req, res, next) => {
 router.get('/', tokenExtractor, async (req, res) => {
   try {
     const user = await User.findByPk(req.decodedToken.id)
+
+    // If user has been removed from database while still logged in
+    if (!user) {
+      return res.status(401).json({ error: 'user missing' })
+    }
+
     const stocks = await Stock.findAll({
       where: {
         userId: user.id

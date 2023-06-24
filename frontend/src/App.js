@@ -4,6 +4,7 @@ import Main from './components/Main'
 import Signup from './components/Signup'
 import Login from './components/Login'
 import PieChart from './components/PieChart'
+import Line from './components/Line'
 import Candlestick from './components/Candlestick'
 import News from './components/News'
 import NotFound from './components/NotFound'
@@ -43,6 +44,12 @@ const App = () => {
   const [checkingValidSymbol, setCheckingValidSymbol] = useState(false)
   const [fetchingNews, setFetchingNews] = useState(false)
 
+  const [timestamps, setTimestamps] = useState(null)
+  const [lineStart, setLineStart] = useState(0)
+  const [lineEnd, setLineEnd] = useState(100)
+  const [lineStartValue, setLineStartValue] = useState(null)
+  const [lineEndValue, setLineEndValue] = useState(null)
+
   const navigate = useNavigate()
 
   const location = useLocation()
@@ -61,6 +68,11 @@ const App = () => {
     setCandlestickData(null)
     setNews(null)
     setNewsSymbols(new Set())
+    setTimestamps(null)
+    setLineStart(0)
+    setLineEnd(100)
+    setLineStartValue(null)
+    setLineEndValue(null)
   }, [])
 
   const handleTimeout = useCallback(() => {
@@ -108,9 +120,16 @@ const App = () => {
     } catch (error) {
       if (error.response.data.error === 'token invalid') {
         handleTimeout()
+      } else if (error.response.data.error === 'user missing') {
+        handleLogout()
       }
     }
-  }, [handleTimeout, fetchNews])
+  }, [handleTimeout, handleLogout, fetchNews])
+
+  const fetchTimestamps = async () => {
+    const response = await stockService.getPastStocks()
+    setTimestamps(response)
+  }
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedLaughingStockUser')
@@ -119,6 +138,7 @@ const App = () => {
       setUser(user)
       stockService.setToken(user.token)
       fetchStocks()
+      fetchTimestamps()
     }
   }, [fetchStocks])
 
@@ -135,6 +155,7 @@ const App = () => {
       setUser(user)
       setMessage(null)
       fetchStocks()
+      fetchTimestamps()
       setUsername('')
       setPassword('')
       navigate('/')
@@ -401,9 +422,31 @@ const App = () => {
           element={loggedIn
             ? <PieChart
               user={user}
+              handleLogout={handleLogout}
               stocks={sortStocks([ ...stocks ], sortBy, trades)}
               trades={trades}
+            />
+            : <Navigate replace to='/' />
+          }
+        />
+        <Route
+          path='/line'
+          element={loggedIn
+            ? <Line
+              user={user}
               handleLogout={handleLogout}
+              timestamps={timestamps}
+              stocks={stocks}
+              trades={trades}
+              lineStart={lineStart}
+              lineEnd={lineEnd}
+              setLineStart={setLineStart}
+              setLineEnd={setLineEnd}
+              lineStartValue={lineStartValue}
+              lineEndValue={lineEndValue}
+              setLineStartValue={setLineStartValue}
+              setLineEndValue={setLineEndValue}
+              sortBy={sortBy}
             />
             : <Navigate replace to='/' />
           }
