@@ -28,7 +28,7 @@ bot.onText(/\/start/, (msg) => {
 bot.onText(/\/help/, (msg) => {
   // Handle the /help command
   const chat_id = msg.chat.id
-  bot.sendMessage(chat_id, '/start - Starts the bot\n/help - Provides the list of available commands\n/login - Login to your Laughing Stock account\n/getnews - Get stock news')
+  bot.sendMessage(chat_id, '/start - Starts the bot\n/help - Provides the list of available commands\n/login - Login to your Laughing Stock account\n/getnews - Get the price change over the last week of your stocks\n/logout - Logouts of your Laughing Stock account')
   console.log('Received /help command')
 })
 
