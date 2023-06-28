@@ -17,7 +17,7 @@ const StockForm = ({
     <Form onSubmit={addStock}>
       <Form.Group className='mb-3' controlId='formSymbol'>
         <Form.Label>Symbol</Form.Label>
-        <Form.Control 
+        <Form.Control
           type='text'
           value={newSymbol}
           onKeyDown={(event) => blockNonAlphabetKeys(event)}

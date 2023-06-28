@@ -41,7 +41,7 @@ const Stock = ({
       <td className='align-middle'>{price ? `$${(price * stock.quantity).toFixed(2)}` : <Loading />}</td>
       <td className='align-middle'>
         <span className={styles.delete}>
-          <BsFillTrashFill color='red' onClick={loading ? null : () => deleteStock(stock.id)} />
+          <BsFillTrashFill data-testid='delete' color='red' onClick={loading ? null : () => deleteStock(stock.id)} />
         </span>
       </td>
     </tr>

@@ -25,11 +25,13 @@ const StockTable = ({
           <th>
             Symbol
             <span className={styles.sort}>
-              <FcAlphabeticalSortingZa 
+              <FcAlphabeticalSortingZa
+                data-testid='symbol-descending'
                 className={sortBy === 'symbol descending' ? styles.selected : ''}
                 onClick={() => sortStocksAndUpdate('symbol descending')}
               />
               <FcAlphabeticalSortingAz
+                data-testid='symbol-ascending'
                 className={sortBy === 'symbol ascending' ? styles.selected : ''}
                 onClick={() => sortStocksAndUpdate('symbol ascending')}
               />
