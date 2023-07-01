@@ -8,6 +8,7 @@ import Arrow from './Arrow'
 import Rect from './Rect'
 import sortPastStocks from '../util/sortPastStocks'
 import styles from './Line.module.css'
+// import background from './background.module.css'
 
 const Line = ({
   user,
@@ -151,19 +152,28 @@ const Line = ({
       },
       title: {
         left: 'center',
-        text: 'Total Portfolio Value'
+        text: 'Total Portfolio Value',
+        textStyle: {
+          color: 'white',
+        },
       },
       xAxis: {
         type: 'category',
         boundaryGap: false,
-        data: dates
+        data: dates,
+        axisLabel: {
+          color: 'white',
+        },
       },
       yAxis: {
         type: 'value',
         boundaryGap: [0, '100%'],
         splitArea: {
           show: true
-        }
+        },
+        axisLabel: {
+          color: 'white',
+        },
       },
       dataZoom: [
         {
@@ -233,7 +243,7 @@ const Line = ({
   }, [setLineStart, setLineEnd, handleChange, setLineStartValue, setLineEndValue])
 
   return (
-    <div>
+    <div className={styles.wallpaper}>
       <Navbar
         user={user}
         handleLogout={handleLogout}
@@ -250,7 +260,7 @@ const Line = ({
             <ReactECharts
               ref={chartRef}
               option={option}
-              style={{ height: '500px', marginBottom: '20px' }}
+              style={{ height: '500px', marginBottom: '20px',}}
               onEvents={handleEvents}
             />
             <div className={styles.pContainer}>

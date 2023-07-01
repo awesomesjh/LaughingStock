@@ -3,8 +3,10 @@ import StockForm from './StockForm'
 import Navbar from './Navbar'
 import Notification from './Notification'
 import sortStocks from '../util/sortStocks'
+import background from './background.module.css'
+import styles from './Dashboard.module.css'
 
-const Dashboard = ({ 
+const Dashboard = ({
   user,
   handleLogout,
   stocks,
@@ -34,36 +36,38 @@ const Dashboard = ({
   const loading = checkLoading()
 
   return (
-    <main>
+    <main className={background.wallpaper}>
       <Navbar
         user={user}
         handleLogout={handleLogout}
       />
-      <StockTable
-        stocks={sortStocks([ ...stocks ], sortBy, trades)}
-        sortBy={sortBy}
-        trades={trades}
-        deleteStock={deleteStock}
-        handleQuantityChange={handleQuantityChange}
-        updateQuantity={updateQuantity}
-        sortStocksAndUpdate={sortStocksAndUpdate}
-        loading={loading}
-      />
-      <p>
-        {loading
-          ? `Loading price data...`
-          : `Total portfolio value = $${stocks.reduce((total, stock) => (total + stock.quantity * trades[stock.symbol].Price), 0).toFixed(2)}`}
-      </p>
-      <h2>Add new stock</h2>
-      <StockForm
-        addStock={addStock}
-        newSymbol={newSymbol}
-        handleNewSymbolChange={handleNewSymbolChange}
-        newQuantity={newQuantity}
-        handleNewQuantityChange={handleNewQuantityChange}
-        loading={loading}
-      />
-      <Notification message={message} />
+      <div className={styles.wrapper}>
+        <StockTable
+          stocks={sortStocks([...stocks], sortBy, trades)}
+          sortBy={sortBy}
+          trades={trades}
+          deleteStock={deleteStock}
+          handleQuantityChange={handleQuantityChange}
+          updateQuantity={updateQuantity}
+          sortStocksAndUpdate={sortStocksAndUpdate}
+          loading={loading}
+        />
+        <p className={background.text}>
+          {loading
+            ? `Loading price data...`
+            : `Total portfolio value = $${stocks.reduce((total, stock) => (total + stock.quantity * trades[stock.symbol].Price), 0).toFixed(2)}`}
+        </p>
+        <h2 className={background.text}>Add new stock</h2>
+        <StockForm
+          addStock={addStock}
+          newSymbol={newSymbol}
+          handleNewSymbolChange={handleNewSymbolChange}
+          newQuantity={newQuantity}
+          handleNewQuantityChange={handleNewQuantityChange}
+          loading={loading}
+        />
+        <Notification message={message} />
+      </div>
     </main>
   )
 }

@@ -6,7 +6,7 @@ const PastStockTable = ({ pastStocks, captionTimestamp }) => {
   return (
     <div className={styles.container}>
       <div className={styles.tableContainer}>
-        <Table striped bordered hover>
+        <Table striped bordered hover variant='dark'>
           <caption className={styles.caption}>
             {`Portfolio on ${captionTimestamp}`}
           </caption>

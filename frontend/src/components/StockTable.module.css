@@ -15,3 +15,7 @@
   border-width: thin;
   border-radius: 4px;
 }
+
+.darkTable {
+  padding: 100px;
+}
