@@ -8,7 +8,7 @@ import Arrow from './Arrow'
 import Rect from './Rect'
 import sortPastStocks from '../util/sortPastStocks'
 import styles from './Line.module.css'
-// import background from './background.module.css'
+import background from './background.module.css'
 
 const Line = ({
   user,
@@ -65,7 +65,7 @@ const Line = ({
   const handleChange = useCallback((start, end) => {
     const diff = end - start
     const absDiff = Math.abs(diff)
-    let percentage = (absDiff/start*100)
+    let percentage = (absDiff / start * 100)
     if (isNaN(percentage)) {
       percentage = '0.00'
     } else if (!isFinite(percentage)) {
@@ -105,7 +105,7 @@ const Line = ({
       }
       if (!change) {
         handleChange(yAxisData[lineStartValue], yAxisData[lineEndValue])
-      } 
+      }
     } else {
       if (!color) {
         handleColor(yAxisData[0], yAxisData.at(-1))
@@ -120,7 +120,7 @@ const Line = ({
       const marker = params[0].marker
       const seriesName = params[0].seriesName
       const yAxisValue = params[0].data
-      
+
       const pastStocksData = []
       if (xAxisValue in timestamps) {
         const timestamp = timestamps[xAxisValue]
@@ -243,26 +243,29 @@ const Line = ({
   }, [setLineStart, setLineEnd, handleChange, setLineStartValue, setLineEndValue])
 
   return (
-    <div className={styles.wallpaper}>
+    <div className={background.wallpaper}>
       <Navbar
         user={user}
         handleLogout={handleLogout}
       />
       {!timestamps || loading
         ? <div className={styles.container}>
-            <LoadingCaption />
-          </div>
+          <LoadingCaption />
+        </div>
         : timestamps === 'not enough data'
-        ? <div className={styles.container}>
+          ? <div className={styles.container}>
             Account must be at least 5 working days old to begin using line graph.
           </div>
-        : <>
-            <ReactECharts
-              ref={chartRef}
-              option={option}
-              style={{ height: '500px', marginBottom: '20px',}}
-              onEvents={handleEvents}
-            />
+          : <>
+            <div className={styles.chart}>
+              <ReactECharts
+                ref={chartRef}
+                option={option}
+                style={{ height: '500px', marginBottom: '20px', width: '90%' }}
+                onEvents={handleEvents}
+              />
+            </div>
+
             <div className={styles.pContainer}>
               <p className={color === RED ? styles.red : color === GREEN ? styles.green : styles.gray}>
                 <span className={styles.span}>
@@ -277,10 +280,10 @@ const Line = ({
           </>
       }
       {pastStocks
-        ? <PastStockTable 
-            pastStocks={sortPastStocks([...pastStocks], sortBy)}
-            captionTimestamp={captionTimestamp}
-          />
+        ? <PastStockTable
+          pastStocks={sortPastStocks([...pastStocks], sortBy)}
+          captionTimestamp={captionTimestamp}
+        />
         : null
       }
     </div>
