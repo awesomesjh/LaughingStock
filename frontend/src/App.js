@@ -17,7 +17,7 @@ import userService from './services/users'
 import sortStocks from './util/sortStocks'
 import setsEqual from './util/setsEqual'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import Container from 'react-bootstrap/Container'
+// import Container from 'react-bootstrap/Container'
 import './styles.css'
 
 const App = () => {
@@ -378,7 +378,7 @@ const App = () => {
   }
 
   return (
-    <Container>
+    <div>
       <Routes>
         <Route
           path='/'
@@ -488,7 +488,7 @@ const App = () => {
         />
         <Route path='*' element={<NotFound />} />
       </Routes>
-    </Container>
+    </div>
   )
 }
 

@@ -2,6 +2,8 @@ import ReactECharts from 'echarts-for-react'
 import Navbar from './Navbar'
 import PlaceholderCandlestick from './PlaceholderCandlestick'
 import CandlestickForm from './CandlestickForm'
+import background from './background.module.css'
+import styles from './Candlestick.module.css'
 
 const Candlestick = ({
   user,
@@ -24,7 +26,10 @@ const Candlestick = ({
   const option = !candlestickData ? null : {
     title: {
       text: candlestickSymbol,
-      left: 'center'
+      left: 'center',
+      textStyle: {
+        color: 'white',
+      },
     },
     tooltip: {
       trigger: 'axis',
@@ -42,13 +47,19 @@ const Candlestick = ({
       data: candlestickData.timestamps,
       boundaryGap: true,
       axisLine: { onZero: false },
-      splitLine: { show: false }
+      splitLine: { show: false },
+      axisLabel: {
+        color: 'white',
+      },
     },
     yAxis: {
       scale: true,
       splitArea: {
         show: true
-      }
+      },
+      axisLabel: {
+        color: 'white',
+      },
     },
     dataZoom: [
       {
@@ -77,7 +88,7 @@ const Candlestick = ({
     ]
   }
   return (
-    <div>
+    <div className={background.wallpaper}>
       <Navbar
         user={user}
         handleLogout={handleLogout}
@@ -86,14 +97,16 @@ const Candlestick = ({
         ? <ReactECharts option={option} style={{ height: '500px' }} />
         : <PlaceholderCandlestick loading={loading} error={error} />
       }
-      <CandlestickForm
-        newCandlestickSymbol={newCandlestickSymbol}
-        newCandlestickStart={newCandlestickStart}
-        handleNewCandlestickSymbolChange={handleNewCandlestickSymbolChange}
-        handleNewCandlestickStartChange={handleNewCandlestickStartChange}
-        fetchCandlestickData={fetchCandlestickData}
-        loading={loading}
-      />
+      <div className={styles.form}>
+        <CandlestickForm
+          newCandlestickSymbol={newCandlestickSymbol}
+          newCandlestickStart={newCandlestickStart}
+          handleNewCandlestickSymbolChange={handleNewCandlestickSymbolChange}
+          handleNewCandlestickStartChange={handleNewCandlestickStartChange}
+          fetchCandlestickData={fetchCandlestickData}
+          loading={loading}
+        />
+      </div>
     </div>
   )
 }

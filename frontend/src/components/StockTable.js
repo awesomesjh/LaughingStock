@@ -19,7 +19,7 @@ const StockTable = ({
   loading
 }) => {
   return (
-    <Table striped bordered hover>
+    <Table striped bordered hover className={styles.darkTable} variant='dark'>
       <thead>
         <tr className={styles.tr}>
           <th>

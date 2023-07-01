@@ -21,7 +21,7 @@ const News = ({
   }, [news, newsUpdated, currentSymbols, fetchNews, checkingValidSymbol, fetchingNews])
 
   return (
-    <div>
+    <div className={styles.wallpaper}>
       <Navbar
         user={user}
         handleLogout={handleLogout}

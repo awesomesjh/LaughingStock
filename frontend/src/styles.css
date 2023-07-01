@@ -1,5 +1,22 @@
 /* Add global styles here */
 
-html {
+/* I commented this out cause it gives weired padding to the page  */
+/* html {
   scrollbar-gutter: stable both-edges;
+} */
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+:global .recharts-responsive-container div:nth-child(2) {
+  overflow: hidden !important;
+  }
+  
+:global .recharts-responsive-container div:nth-child(2) div {
+  overflow: hidden !important;
 }

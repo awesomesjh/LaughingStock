@@ -1,0 +1,43 @@
+.background {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: url('./stock_image.jpg') no-repeat center center fixed;
+  /* image source https://www.freepik.com/free-vector/global-business-background-with-stock-chart-blue-tone_16406606.htm */
+}
+
+.header {
+  font-size: 24px;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.signup,
+.login {
+  margin-top: 10px;
+}
+
+.signup a,
+.login a {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #0d6efd;
+  color: #fff;
+  text-decoration: none;
+  font-size: 18px;
+  border-radius: 5px;
+}
+
+.signup a:hover,
+.login a:hover {
+  background-color: #0b5ed7;
+  color: white;
+}
+
+.signup a:active,
+.login a:active {
+  background-color: #003d80;
+  color: white;
+}

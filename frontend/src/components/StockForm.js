@@ -4,6 +4,7 @@ import blockKeys from '../util/blockKeys'
 import blockPaste from '../util/blockPaste'
 import blockNonAlphabetKeys from '../util/blockNonAlphabetKeys'
 import blockNonAlphabetPaste from '../util/blockNonAlphabetPaste'
+import styles from './StockForm.module.css'
 
 const StockForm = ({
   addStock,
@@ -16,7 +17,7 @@ const StockForm = ({
   return (
     <Form onSubmit={addStock}>
       <Form.Group className='mb-3' controlId='formSymbol'>
-        <Form.Label>Symbol</Form.Label>
+        <Form.Label className={styles.label}>Symbol</Form.Label>
         <Form.Control
           type='text'
           value={newSymbol}
@@ -28,7 +29,7 @@ const StockForm = ({
         />
       </Form.Group>
       <Form.Group className='mb-3' controlId='formQuantity'>
-        <Form.Label>Quantity</Form.Label>
+        <Form.Label className={styles.label}>Quantity</Form.Label>
         <Form.Control
           type='number'
           min='1'
