@@ -125,10 +125,18 @@ const App = () => {
     }
   }, [handleTimeout, handleLogout, fetchNews])
 
-  const fetchTimestamps = async () => {
-    const response = await stockService.getPastStocks()
-    setTimestamps(response)
-  }
+  const fetchTimestamps = useCallback(async () => {
+    try {
+      const response = await stockService.getPastStocks()
+      setTimestamps(response)
+    } catch (error) {
+      if (error.response.data.error === 'token invalid') {
+        handleTimeout()
+      } else if (error.response.data.error === 'user missing') {
+        handleLogout()
+      }
+    }
+  }, [handleTimeout, handleLogout])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedLaughingStockUser')
@@ -139,7 +147,7 @@ const App = () => {
       fetchStocks()
       fetchTimestamps()
     }
-  }, [fetchStocks])
+  }, [fetchStocks, fetchTimestamps])
 
   const handleLogin = async (event) => {
     event.preventDefault()
