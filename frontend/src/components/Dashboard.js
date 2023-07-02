@@ -3,7 +3,7 @@ import StockForm from './StockForm'
 import Navbar from './Navbar'
 import Notification from './Notification'
 import sortStocks from '../util/sortStocks'
-import background from './background.module.css'
+import Container from 'react-bootstrap/Container'
 import styles from './Dashboard.module.css'
 
 const Dashboard = ({
@@ -36,12 +36,12 @@ const Dashboard = ({
   const loading = checkLoading()
 
   return (
-    <main className={background.wallpaper}>
+    <main>
       <Navbar
         user={user}
         handleLogout={handleLogout}
       />
-      <div className={styles.wrapper}>
+      <Container>
         <StockTable
           stocks={sortStocks([...stocks], sortBy, trades)}
           sortBy={sortBy}
@@ -52,12 +52,12 @@ const Dashboard = ({
           sortStocksAndUpdate={sortStocksAndUpdate}
           loading={loading}
         />
-        <p className={background.text}>
+        <p>
           {loading
             ? `Loading price data...`
             : `Total portfolio value = $${stocks.reduce((total, stock) => (total + stock.quantity * trades[stock.symbol].Price), 0).toFixed(2)}`}
         </p>
-        <h2 className={background.text}>Add new stock</h2>
+        <h2>Add new stock</h2>
         <StockForm
           addStock={addStock}
           newSymbol={newSymbol}
@@ -66,8 +66,10 @@ const Dashboard = ({
           handleNewQuantityChange={handleNewQuantityChange}
           loading={loading}
         />
-        <Notification message={message} />
-      </div>
+        <div className={styles.notificationContainer}>
+          <Notification message={message} />
+        </div>
+      </Container>
     </main>
   )
 }

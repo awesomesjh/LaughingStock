@@ -14,9 +14,9 @@ const Navibar = ({ user, handleLogout }) => {
     <>
       {['sm'].map((expand) => (
         // [false, 'sm', 'md', 'lg', 'xl', 'xxl'] are the different sizes before the it becomes off canvas
-        <Navbar key={expand} bg='dark' variant='dark' expand={expand} className='mb-3' sticky='top'>
+        <Navbar className={`${styles.navbar} mb-3`} key={expand} bg='dark' variant='dark' expand={expand} sticky='top'>
           <Container fluid>
-            <Navbar.Brand>Welcome to Laughing Stock, {user.username}!</Navbar.Brand>
+            <Navbar.Brand className={styles.welcome}>Welcome to Laughing Stock, {user.username}!</Navbar.Brand>
             <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
             <Navbar.Offcanvas
               id={`offcanvasNavbar-expand-${expand}`}

@@ -35,7 +35,13 @@ router.get('/:symbols', async (req, res) => {
       const date = await article.locator('time').innerText()
 
       const firstdiv = article.locator('div').first()
-      const logo = await firstdiv.locator('img').first().getAttribute('src')
+      const count = await firstdiv.locator('img').nth(1).count()
+      let logo = null
+      if (count) {
+        logo = await firstdiv.locator('img').nth(1).getAttribute('src')
+      } else {
+        logo = await firstdiv.locator('img').first().getAttribute('src')
+      }
       const source = await firstdiv.locator('a').innerText()
 
       let img = null

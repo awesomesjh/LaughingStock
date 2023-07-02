@@ -5,7 +5,6 @@ import 'chart.js/auto'
 import Navbar from './Navbar'
 import LoadingCaption from './LoadingCaption'
 import styles from './PieChart.module.css'
-import background from './background.module.css'
 
 const PieChart = ({ user, handleLogout, stocks, trades }) => {
   const totalPrice = stocks.map((stock) => trades[stock.symbol] ? trades[stock.symbol].Price * stock.quantity : null)
@@ -33,16 +32,19 @@ const PieChart = ({ user, handleLogout, stocks, trades }) => {
       legend: {
         position: 'top',
         labels: {
-          color: 'white', // Change this to the desired color
-        },
+          color: 'white' // Change this to the desired color
+        }
       },
       title: {
         display: true,
-        text: 'Portfolio breakdown',
-        color: 'white'
+        text: 'Portfolio Breakdown',
+        color: 'white',
+        font: {
+          size: 20
+        }
       }
     }
-  };
+  }
 
   const checkLoading = () => {
     for (const stock of stocks) {
@@ -56,7 +58,7 @@ const PieChart = ({ user, handleLogout, stocks, trades }) => {
   const loading = checkLoading()
 
   return (
-    <div className={background.wallpaper}>
+    <div>
       <Navbar
         user={user}
         handleLogout={handleLogout}
@@ -66,9 +68,9 @@ const PieChart = ({ user, handleLogout, stocks, trades }) => {
           ? <LoadingCaption />
           : stocks.length
           ? <div className={styles.size}>
-              <Pie data={data} options={options}/>
+              <Pie data={data} options={options} />
             </div>
-          : <p className={background.text}>No stocks found. Add some stocks to view pie chart.</p>}
+          : <p>No stocks found. Add some stocks to view pie chart.</p>}
       </div>
     </div>
   )

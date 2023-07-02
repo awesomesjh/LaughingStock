@@ -17,7 +17,6 @@ import userService from './services/users'
 import sortStocks from './util/sortStocks'
 import setsEqual from './util/setsEqual'
 import 'bootstrap/dist/css/bootstrap.min.css'
-// import Container from 'react-bootstrap/Container'
 import './styles.css'
 
 const App = () => {
@@ -378,117 +377,115 @@ const App = () => {
   }
 
   return (
-    <div>
-      <Routes>
-        <Route
-          path='/'
-          element={
-            <Main
-              user={user}
-              handleLogout={handleLogout}
-              stocks={stocks}
-              sortBy={sortBy}
-              trades={trades}
-              newSymbol={newSymbol}
-              newQuantity={newQuantity}
-              handleNewSymbolChange={handleNewSymbolChange}
-              handleNewQuantityChange={handleNewQuantityChange}
-              handleQuantityChange={handleQuantityChange}
-              addStock={addStock}
-              deleteStock={deleteStock}
-              updateQuantity={updateQuantity}
-              sortStocksAndUpdate={sortStocksAndUpdate}
-              message={message}
-            />
-          }
-        />
-        <Route
-          path='/login'
-          element={!loggedIn
-            ? <Login
-              username={username}
-              password={password}
-              handleUsernameChange={({ target }) => setUsername(target.value)}
-              handlePasswordChange={({ target }) => setPassword(target.value)}
-              handleLogin={handleLogin}
-              message={message}
-            />
-            : <Navigate replace to='/' />
-          }
-        />
-        <Route path='/signup' element={!loggedIn ? <Signup /> : <Navigate replace to='/' />} />
-        <Route
-          path='/piechart'
-          element={loggedIn
-            ? <PieChart
-              user={user}
-              handleLogout={handleLogout}
-              stocks={sortStocks([ ...stocks ], sortBy, trades)}
-              trades={trades}
-            />
-            : <Navigate replace to='/' />
-          }
-        />
-        <Route
-          path='/line'
-          element={loggedIn
-            ? <Line
-              user={user}
-              handleLogout={handleLogout}
-              timestamps={timestamps}
-              stocks={stocks}
-              trades={trades}
-              lineStart={lineStart}
-              lineEnd={lineEnd}
-              setLineStart={setLineStart}
-              setLineEnd={setLineEnd}
-              lineStartValue={lineStartValue}
-              lineEndValue={lineEndValue}
-              setLineStartValue={setLineStartValue}
-              setLineEndValue={setLineEndValue}
-              sortBy={sortBy}
-            />
-            : <Navigate replace to='/' />
-          }
-        />
-        <Route
-          path='/candlestick'
-          element={loggedIn
-            ? <Candlestick 
-              user={user}
-              handleLogout={handleLogout}
-              candlestickSymbol={candlestickSymbol}
-              candlestickData={candlestickData}
-              newCandlestickSymbol={newCandlestickSymbol}
-              newCandlestickStart={newCandlestickStart}
-              handleNewCandlestickSymbolChange={handleNewCandlestickSymbolChange}
-              handleNewCandlestickStartChange={handleNewCandlestickStartChange}
-              fetchCandlestickData={fetchCandlestickData}
-              loading={loadingCandlestick}
-              error={candlestickError}
-            />
-            : <Navigate replace to='/' />
-          }
-        />
-        <Route
-          path='/news'
-          element={loggedIn
-            ? <News
-              user={user}
-              handleLogout={handleLogout}
-              news={news}
-              newsUpdated={newsUpdated}
-              currentSymbols={currentSymbols}
-              fetchNews={fetchNews}
-              checkingValidSymbol={checkingValidSymbol}
-              fetchingNews={fetchingNews}
-            />
-            : <Navigate replace to='/' />
-          }
-        />
-        <Route path='*' element={<NotFound />} />
-      </Routes>
-    </div>
+    <Routes>
+      <Route
+        path='/'
+        element={
+          <Main
+            user={user}
+            handleLogout={handleLogout}
+            stocks={stocks}
+            sortBy={sortBy}
+            trades={trades}
+            newSymbol={newSymbol}
+            newQuantity={newQuantity}
+            handleNewSymbolChange={handleNewSymbolChange}
+            handleNewQuantityChange={handleNewQuantityChange}
+            handleQuantityChange={handleQuantityChange}
+            addStock={addStock}
+            deleteStock={deleteStock}
+            updateQuantity={updateQuantity}
+            sortStocksAndUpdate={sortStocksAndUpdate}
+            message={message}
+          />
+        }
+      />
+      <Route
+        path='/login'
+        element={!loggedIn
+          ? <Login
+            username={username}
+            password={password}
+            handleUsernameChange={({ target }) => setUsername(target.value)}
+            handlePasswordChange={({ target }) => setPassword(target.value)}
+            handleLogin={handleLogin}
+            message={message}
+          />
+          : <Navigate replace to='/' />
+        }
+      />
+      <Route path='/signup' element={!loggedIn ? <Signup /> : <Navigate replace to='/' />} />
+      <Route
+        path='/piechart'
+        element={loggedIn
+          ? <PieChart
+            user={user}
+            handleLogout={handleLogout}
+            stocks={sortStocks([ ...stocks ], sortBy, trades)}
+            trades={trades}
+          />
+          : <Navigate replace to='/' />
+        }
+      />
+      <Route
+        path='/line'
+        element={loggedIn
+          ? <Line
+            user={user}
+            handleLogout={handleLogout}
+            timestamps={timestamps}
+            stocks={stocks}
+            trades={trades}
+            lineStart={lineStart}
+            lineEnd={lineEnd}
+            setLineStart={setLineStart}
+            setLineEnd={setLineEnd}
+            lineStartValue={lineStartValue}
+            lineEndValue={lineEndValue}
+            setLineStartValue={setLineStartValue}
+            setLineEndValue={setLineEndValue}
+            sortBy={sortBy}
+          />
+          : <Navigate replace to='/' />
+        }
+      />
+      <Route
+        path='/candlestick'
+        element={loggedIn
+          ? <Candlestick 
+            user={user}
+            handleLogout={handleLogout}
+            candlestickSymbol={candlestickSymbol}
+            candlestickData={candlestickData}
+            newCandlestickSymbol={newCandlestickSymbol}
+            newCandlestickStart={newCandlestickStart}
+            handleNewCandlestickSymbolChange={handleNewCandlestickSymbolChange}
+            handleNewCandlestickStartChange={handleNewCandlestickStartChange}
+            fetchCandlestickData={fetchCandlestickData}
+            loading={loadingCandlestick}
+            error={candlestickError}
+          />
+          : <Navigate replace to='/' />
+        }
+      />
+      <Route
+        path='/news'
+        element={loggedIn
+          ? <News
+            user={user}
+            handleLogout={handleLogout}
+            news={news}
+            newsUpdated={newsUpdated}
+            currentSymbols={currentSymbols}
+            fetchNews={fetchNews}
+            checkingValidSymbol={checkingValidSymbol}
+            fetchingNews={fetchingNews}
+          />
+          : <Navigate replace to='/' />
+        }
+      />
+      <Route path='*' element={<NotFound />} />
+    </Routes>
   )
 }
 

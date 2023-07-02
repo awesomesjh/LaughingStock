@@ -2,8 +2,7 @@ import ReactECharts from 'echarts-for-react'
 import Navbar from './Navbar'
 import PlaceholderCandlestick from './PlaceholderCandlestick'
 import CandlestickForm from './CandlestickForm'
-import background from './background.module.css'
-import styles from './Candlestick.module.css'
+import Container from 'react-bootstrap/Container'
 
 const Candlestick = ({
   user,
@@ -28,19 +27,14 @@ const Candlestick = ({
       text: candlestickSymbol,
       left: 'center',
       textStyle: {
-        color: 'white',
-      },
+        color: 'white'
+      }
     },
     tooltip: {
       trigger: 'axis',
       axisPointer: {
         type: 'cross'
       }
-    },
-    grid: {
-      left: '10%',
-      right: '10%',
-      bottom: '15%'
     },
     xAxis: {
       type: 'category',
@@ -49,17 +43,20 @@ const Candlestick = ({
       axisLine: { onZero: false },
       splitLine: { show: false },
       axisLabel: {
-        color: 'white',
-      },
+        color: 'white'
+      }
     },
     yAxis: {
       scale: true,
       splitArea: {
-        show: true
+        show: true,
+        areaStyle: {
+          color: ['rgba(0, 45, 79, 0.3)', 'rgba(0, 95, 129, 0.3)']
+        }
       },
       axisLabel: {
-        color: 'white',
-      },
+        color: 'white'
+      }
     },
     dataZoom: [
       {
@@ -70,7 +67,10 @@ const Candlestick = ({
       {
         show: true,
         type: 'slider',
-        top: '90%'
+        top: '92%',
+        textStyle: {
+          color: 'white'
+        }
       }
     ],
     series: [
@@ -88,16 +88,16 @@ const Candlestick = ({
     ]
   }
   return (
-    <div className={background.wallpaper}>
+    <div>
       <Navbar
         user={user}
         handleLogout={handleLogout}
       />
-      {!loading && !error && candlestickData
-        ? <ReactECharts option={option} style={{ height: '500px' }} />
-        : <PlaceholderCandlestick loading={loading} error={error} />
-      }
-      <div className={styles.form}>
+      <Container>
+        {!loading && !error && candlestickData
+          ? <ReactECharts option={option} style={{ height: '500px', marginBottom: '20px', marginTop: '30px' }} />
+          : <PlaceholderCandlestick loading={loading} error={error} />
+        }
         <CandlestickForm
           newCandlestickSymbol={newCandlestickSymbol}
           newCandlestickStart={newCandlestickStart}
@@ -106,7 +106,7 @@ const Candlestick = ({
           fetchCandlestickData={fetchCandlestickData}
           loading={loading}
         />
-      </div>
+      </Container>
     </div>
   )
 }

@@ -7,8 +7,8 @@ import PastStockTable from './PastStockTable'
 import Arrow from './Arrow'
 import Rect from './Rect'
 import sortPastStocks from '../util/sortPastStocks'
+import Container from 'react-bootstrap/Container'
 import styles from './Line.module.css'
-import background from './background.module.css'
 
 const Line = ({
   user,
@@ -154,26 +154,29 @@ const Line = ({
         left: 'center',
         text: 'Total Portfolio Value',
         textStyle: {
-          color: 'white',
-        },
+          color: 'white'
+        }
       },
       xAxis: {
         type: 'category',
         boundaryGap: false,
         data: dates,
         axisLabel: {
-          color: 'white',
-        },
+          color: 'white'
+        }
       },
       yAxis: {
         type: 'value',
         boundaryGap: [0, '100%'],
         splitArea: {
-          show: true
+          show: true,
+          areaStyle: {
+            color: ['rgba(0, 45, 79, 0.3)', 'rgba(0, 95, 129, 0.3)']
+          }
         },
         axisLabel: {
           color: 'white',
-        },
+        }
       },
       dataZoom: [
         {
@@ -184,7 +187,10 @@ const Line = ({
         {
           show: true,
           type: 'slider',
-          top: '92%'
+          top: '92%',
+          textStyle: {
+            color: 'white'
+          }
         }
       ],
       series: [
@@ -204,7 +210,7 @@ const Line = ({
               },
               {
                 offset: 1,
-                color: 'rgb(255, 255, 255)'
+                color: 'rgb(0, 45, 79)'
               }
             ])
           },
@@ -243,49 +249,48 @@ const Line = ({
   }, [setLineStart, setLineEnd, handleChange, setLineStartValue, setLineEndValue])
 
   return (
-    <div className={background.wallpaper}>
+    <div>
       <Navbar
         user={user}
         handleLogout={handleLogout}
       />
-      {!timestamps || loading
-        ? <div className={styles.container}>
-          <LoadingCaption />
-        </div>
-        : timestamps === 'not enough data'
+      <Container>
+        {!timestamps || loading
           ? <div className={styles.container}>
-            Account must be at least 5 working days old to begin using line graph.
-          </div>
-          : <>
-            <div className={styles.chart}>
-              <ReactECharts
-                ref={chartRef}
-                option={option}
-                style={{ height: '500px', marginBottom: '20px', width: '90%' }}
-                onEvents={handleEvents}
-              />
+              <LoadingCaption />
             </div>
-
-            <div className={styles.pContainer}>
-              <p className={color === RED ? styles.red : color === GREEN ? styles.green : styles.gray}>
-                <span className={styles.span}>
-                  <b>{change} </b>
-                </span>
-                {color === GRAY
-                  ? <Rect />
-                  : <Arrow color={color} RED={RED} />
-                }
-              </p>
-            </div>
-          </>
-      }
-      {pastStocks
-        ? <PastStockTable
-          pastStocks={sortPastStocks([...pastStocks], sortBy)}
-          captionTimestamp={captionTimestamp}
-        />
-        : null
-      }
+          : timestamps === 'not enough data'
+            ? <div className={styles.container}>
+                Account must be at least 5 working days old to begin using line graph.
+              </div>
+            : <>
+                <ReactECharts
+                  ref={chartRef}
+                  option={option}
+                  style={{ height: '500px', marginBottom: '20px', marginTop: '30px' }}
+                  onEvents={handleEvents}
+                />     
+                <div className={styles.pContainer}>
+                  <p className={color === RED ? styles.red : color === GREEN ? styles.green : styles.gray}>
+                    <span className={styles.span}>
+                      <b>{change} </b>
+                    </span>
+                    {color === GRAY
+                      ? <Rect />
+                      : <Arrow color={color} RED={RED} />
+                    }
+                  </p>
+                </div>
+              </>
+        }
+        {pastStocks
+          ? <PastStockTable
+            pastStocks={sortPastStocks([...pastStocks], sortBy)}
+            captionTimestamp={captionTimestamp}
+          />
+          : null
+        }
+      </Container>
     </div>
   )
 }

@@ -2,8 +2,8 @@
   display: flex;
   width: 750px;
   height: auto;
-  background-color: #f1f1f1;
-  border: 1px solid #ddd;
+  background-color: #212529;
+  border: 1px solid #212529;
   border-radius: 8px;
   padding: 20px;
   margin: auto;
@@ -56,7 +56,7 @@
 }
 
 .date {
-  color: #888;
+  color: rgba(255, 255, 255, 0.55);
   margin: 0;
 }
 

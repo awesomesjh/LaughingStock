@@ -46,32 +46,34 @@ const Signup = () => {
   }
 
   return (
-    <main className={styles.background}>
+    <main className={`${styles.container} background`}>
       <div className={styles.wrapper}>
-        <h2 className={styles.header}>Sign up for Laughing Stock here!</h2>
-
+        <h2 className={styles.header}>Sign up for Laughing Stock</h2>
         <Form onSubmit={handleSignup}>
-          <Form.Group className="mb-3" controlId="formUsername">
-            <Form.Label className={styles.formLabel}>Username</Form.Label>
-            <Form.Control type="text" value={username} onChange={handleUsernameChange} placeholder="Enter Username" />
+          <Form.Group className='mb-3' controlId='formUsername'>
+            <Form.Label>Username</Form.Label>
+            <Form.Control type='text' value={username} onChange={handleUsernameChange} placeholder='Enter Username' />
           </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formPassword">
-            <Form.Label className={styles.formLabel}>Password</Form.Label>
-            <Form.Control type="password" value={password} onChange={handlePasswordChange} placeholder="Enter Password" />
+          <Form.Group className='mb-3' controlId='formPassword'>
+            <Form.Label>Password</Form.Label>
+            <Form.Control type='password' value={password} onChange={handlePasswordChange} placeholder='Enter Password' />
             <Form.Text className={styles.reminder}>
               Don't forget your password
             </Form.Text>
           </Form.Group>
-          <Button variant="primary" type="submit">
-            Sign Up!
-          </Button>
+          <div className={styles.buttonContainer}>
+            <Button variant='success' type='submit'>
+              Sign Up
+            </Button>
+          </div>
         </Form>
         <Notification message={message} />
-        <div className={styles.prompt}>
-          <h2 className={styles.promptText}>Try logging in now!</h2>
-          <Link to="/login" className={styles.promptButton}>Login Page</Link>
-        </div>
+      </div>
+      <div className={styles.prompt}>
+        <h2 className={styles.promptText}>Already have an account?</h2>
+        <Link to='/login'>
+          <Button>Login</Button>
+        </Link>
       </div>
     </main>
   )

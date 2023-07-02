@@ -1,22 +1,14 @@
 /* Add global styles here */
 
-/* I commented this out cause it gives weired padding to the page  */
-/* html {
-  scrollbar-gutter: stable both-edges;
-} */
-
-html,
 body {
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
+  background-color: #002d4f;
+  color: white;
+  width: 100vw;
+  overflow-x: hidden;
 }
 
-:global .recharts-responsive-container div:nth-child(2) {
-  overflow: hidden !important;
-  }
-  
-:global .recharts-responsive-container div:nth-child(2) div {
-  overflow: hidden !important;
+.background {
+  background-image: url('./background.jpg');
+  background-position: center;
+  background-attachment: fixed;
 }

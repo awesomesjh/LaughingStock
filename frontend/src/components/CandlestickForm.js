@@ -2,7 +2,6 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import blockNonAlphabetKeys from '../util/blockNonAlphabetKeys'
 import blockNonAlphabetPaste from '../util/blockNonAlphabetPaste'
-import styles from './CandlestickForm.module.css'
 
 const CandlestickForm = ({
   newCandlestickSymbol,
@@ -15,7 +14,7 @@ const CandlestickForm = ({
   return (
     <Form onSubmit={fetchCandlestickData}>
       <Form.Group className='mb-3' controlId='formSymbol'>
-        <Form.Label className={styles.label}>Symbol</Form.Label>
+        <Form.Label>Symbol</Form.Label>
         <Form.Control 
           type='text'
           value={newCandlestickSymbol}
@@ -28,7 +27,7 @@ const CandlestickForm = ({
         />
       </Form.Group>
       <Form.Group className='mb-3' controlId='formStart'>
-        <Form.Label className={styles.label}>Get data from:</Form.Label>
+        <Form.Label>Get data from:</Form.Label>
         <Form.Select
           value={newCandlestickStart}
           onChange={handleNewCandlestickStartChange}
