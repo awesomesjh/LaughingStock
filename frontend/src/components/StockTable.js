@@ -41,10 +41,12 @@ const StockTable = ({
             Quantity
             <span className={styles.sort}>
               <FcNumericalSorting21
+                data-testid='quantity-descending'
                 className={sortBy === 'quantity descending' ? styles.selected : ''}
                 onClick={() => sortStocksAndUpdate('quantity descending')}
               />
               <FcNumericalSorting12
+                data-testid='quantity-ascending'
                 className={sortBy === 'quantity ascending' ? styles.selected : ''}
                 onClick={() => sortStocksAndUpdate('quantity ascending')}
               />
