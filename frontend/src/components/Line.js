@@ -285,9 +285,9 @@ const Line = ({
         }
         {pastStocks
           ? <PastStockTable
-            pastStocks={sortPastStocks([...pastStocks], sortBy)}
-            captionTimestamp={captionTimestamp}
-          />
+              pastStocks={sortPastStocks([...pastStocks], sortBy)}
+              captionTimestamp={captionTimestamp}
+            />
           : null
         }
       </Container>

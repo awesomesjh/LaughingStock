@@ -70,3 +70,15 @@ test('updates symbol and quantity values on input change', async () => {
   expect(handleNewQuantityChange).toHaveBeenCalledTimes(1)
   expect(handleNewQuantityChange).toHaveBeenCalledWith(expect.any(Object))
 })
+
+test('disables the form inputs and button when loading is true', () => {
+  render(<StockForm loading={true} />)
+
+  const symbolInput = screen.getByLabelText('Symbol')
+  const quantityInput = screen.getByLabelText('Quantity')
+  const addButton = screen.getByText('Add')
+
+  expect(symbolInput).toHaveAttribute('readOnly')
+  expect(quantityInput).toHaveAttribute('readOnly')
+  expect(addButton).toBeDisabled()
+})

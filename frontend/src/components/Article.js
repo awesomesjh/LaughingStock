@@ -40,7 +40,8 @@ const Article = ({ article }) => {
   }
 
   return (
-    <div 
+    <div
+      data-testid='article-container'
       className={styles.articleContainer}
       onClick={handleClick}
       onMouseEnter={(event) => handleMouseEnter(event)}
@@ -48,7 +49,7 @@ const Article = ({ article }) => {
     >
       <div className={styles.logoTitleDateContainer}>
         <div className={styles.logoContainer}>
-          <div className={styles.logoSourceContainer} ref={logoSourceRef}>
+          <div data-testid='logo-source-container' className={styles.logoSourceContainer} ref={logoSourceRef}>
             <img
               className={styles.logo}
               src={article.logo}
@@ -76,7 +77,7 @@ const Article = ({ article }) => {
             : null
           }
           {article.img && article.img.slice(0, 23) === 'https://img.youtube.com'
-            ? <div className={styles.playButtonOverlay}></div>
+            ? <div data-testid='play-button-overlay' className={styles.playButtonOverlay}></div>
             : null
           }
         </div>
