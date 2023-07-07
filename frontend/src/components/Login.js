@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import Notification from './Notification'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
-import styles from './signupLogin.module.css'
+import styles from './LoginSignup.module.css'
 
 const Login = ({
   username,

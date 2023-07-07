@@ -19,7 +19,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --watchAll=false",
+    "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!axios)/\" --watchAll=false",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -46,6 +46,8 @@
     "@playwright/test": "^1.35.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
-    "@testing-library/user-event": "^14.4.3"
+    "@testing-library/user-event": "^14.4.3",
+    "canvas": "^2.11.2",
+    "resize-observer-polyfill": "^1.5.1"
   }
 }
