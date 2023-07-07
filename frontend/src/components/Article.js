@@ -40,7 +40,7 @@ const Article = ({ article }) => {
   }
 
   return (
-    <div
+    <article
       data-testid='article-container'
       className={styles.articleContainer}
       onClick={handleClick}
@@ -82,7 +82,7 @@ const Article = ({ article }) => {
           }
         </div>
       </div>
-    </div>
+    </article>
   )
 }
 
