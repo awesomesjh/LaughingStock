@@ -9,8 +9,13 @@ test('renders the past stock data correctly', () => {
     price: 135.5,
     total: 1355
   }
-
-  render(<PastStock pastStock={pastStock} />)
+  render(
+    <table>
+      <tbody>
+        <PastStock pastStock={pastStock} />
+      </tbody>
+    </table>
+  )
 
   const symbolCell = screen.getByText('AAPL')
   const quantityCell = screen.getByText('10')
@@ -30,8 +35,13 @@ test('formats the price and total with two decimal places', () => {
     price: 135.555,
     total: 1355.555
   }
-
-  render(<PastStock pastStock={pastStock} />)
+  render(
+    <table>
+      <tbody>
+        <PastStock pastStock={pastStock} />
+      </tbody>
+    </table>
+  )
 
   const priceCell = screen.getByText('$135.56')
   const totalCell = screen.getByText('$1355.56')
