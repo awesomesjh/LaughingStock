@@ -2,7 +2,7 @@ const telegramBot = require('node-telegram-bot-api')
 const axios = require('axios')
 const moment = require('moment')
 
-const { TELEGRAM_BOT_TOKEN } = require('./util/config')
+const { PORT, TELEGRAM_BOT_TOKEN } = require('./util/config')
 const alpaca = require('./util/alpaca')
 
 const loginURL = '/api/telegram/login'
@@ -12,7 +12,7 @@ const logoutURL = '/api/telegram/logout'
 const proxy = {
   protocol: 'http',
   host: 'localhost',
-  port: 3001,
+  port: PORT,
 }
 
 const bot = new telegramBot(TELEGRAM_BOT_TOKEN, { polling: true })
@@ -143,3 +143,5 @@ bot.on('message', (msg) => {
   // Handle incoming messages used for debugging
   // console.log(msg)
 })
+
+module.exports = bot

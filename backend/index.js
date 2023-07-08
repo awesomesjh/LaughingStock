@@ -1,4 +1,5 @@
 const app = require('./app')
+const bot = require('./telebot')
 
 const { PORT } = require('./util/config')
 const { connectToDatabase } = require('./util/db')

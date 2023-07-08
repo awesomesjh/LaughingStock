@@ -3,3 +3,4 @@
 Dockerfile
 .dockerignore
 fly.toml
+/build
