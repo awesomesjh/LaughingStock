@@ -61,7 +61,6 @@ router.get('/:symbols', async (req, res) => {
     await browser.close()
     res.json(responseArray)
   } catch (error) {
-    console.log(error)
     return res.status(400).json({ error })
   }
 })

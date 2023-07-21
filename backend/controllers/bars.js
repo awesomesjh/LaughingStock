@@ -19,7 +19,6 @@ router.get('/:symbol/:start', async (req, res) => {
     }
     res.json(bars)
   } catch (error) {
-    console.log(error)
     return res.status(400).json({ error })
   }
 })

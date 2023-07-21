@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const path = require('path')
 
 const { tokenExtractor } = require('./util/middleware')
 
@@ -24,6 +25,10 @@ app.use('/api/telegram', teleRouter)
 app.use('/api/paststocks', tokenExtractor, pastRouter)
 
 app.use(express.static('build'))
+
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, './build/index.html'))
+})
 
 if (process.env.NODE_ENV === 'test') {
   const testingRouter = require('./controllers/testing')
