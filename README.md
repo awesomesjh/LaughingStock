@@ -92,7 +92,7 @@ Provides a convenient way for the user to view their stock portfolio on mobile d
 A new database table called teleusers was created to implement the login functionality. If the login in successful, a telegram account will be linked to the Laughing Stock account by creating an entry in teleusers with the Telegram ID corresponding to the Laughing Stock user ID. When /getnews is called, the server searches for the user's Telegram ID in teleusers. If found, the user is considered logged in and GET request is made to the server to obtain the stocks with the corresponding Laughing Stock user ID. Else, the user is not logged in and the command fails. To log out, the user's Telegram ID is deleted from teleusers.
 
 ## System Design
-<img src='system_diagram.png' alt='telegram' width='350'/>
+<img src='system_diagram.png' alt='telegram' width='500'/>
 
 The frontend is broken down into routes using React Router, each with its own React component. The backend is also broken down into routes for handling different API requests from the frontend. The lines between the frontend and the backend represent the flow of API requests.
 
