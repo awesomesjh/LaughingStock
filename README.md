@@ -10,8 +10,11 @@ A web application that displays one's current stock portfolio coupled with analy
 Checking my stock portfolio using a trading app can be troublesome due to 2FA. This is annoying if I just want to take a quick glance at my portfolio.
 
 ### User Stories
-- I am a retail investor, and would like an easy way to check my stock portfolio, so that I dont have to go through the hassle of 2FA and deal with long loading times.
-- I am a retail investor, and would like an application with analysis tools, so that I can gain an insight on my portfolio's performance and make informed investments.
+- As a retail investor, I seek a seamless and efficient method to access my stock portfolio, eliminating the need for cumbersome 2FA procedures and minimizing the frustration caused by lengthy loading times.
+- As a retail investor, I am eager to have an application offering a range of robust analysis tools, including pie charts for a visual breakdown of my portfolio's composition, line charts to track its historical performance, and candlestick charts for detailed market trends. With these comprehensive tools, I can gain valuable insights into my portfolio's performance and make well-informed investment decisions confidently.
+- As a retail investor, I would like to get the latest news related to my portfolio, so that I can stay informed about market developments, track the impact of relevant events on my investments, and make timely and well-informed decisions to optimize my portfolio's performance.
+- As a retail investor, I would like an application with a simple and intuitive user interface that not only enhances ease of use but also captivates with its aesthetically pleasing design, ensuring a seamless and delightful investment experience.
+- As a retail investor, I would like the convenience of checking my stock portfolio on the go, facilitated through a user-friendly Telegram bot that offers real-time updates and easy access to vital investment information at my fingertips.
 
 ### Tech Stack
 - Frontend: React
@@ -106,8 +109,6 @@ Our system has some cases where the backend does not query data from the databas
 Test the application by visiting https://laughing-stock.fly.dev/
 
 Login to the test account with username 'numbers' and password '12345'. This account is pre-loaded with historical data which allows you to try out the line chart.
-
-Unfortunately, our news feature is broken as we were unable to get Playwright working correctly when the app is deployed.
 
 We have also implemented automated testing.
 
@@ -316,4 +317,4 @@ Time:        9.943 s
 - Another problem we faced was the usage of React's useEffect hook, where it would often trigger excessively and make unecessary API calls, resulting in visual glitches on the frontend. To fix this, we added conditional statements to the callback function in useEffect. We also made use of other hooks such as useRef, useCallback and useMemo, to prevent rerendering from affecting variables in the useEffect dependency array.
 - We also ran into many bugs when trying to use external libraries due to poor or unclear documentation. To fix this, we had to spend a lot of time doing trial and error, tweaking various parameters and properties in order to obtain our desired outcome.
 - Sometimes the data obtained from external APIs are not in the format we want. To fix this, we had to modify the data structures, which proved to be a challenge.
-- An issue we have yet to resolve is getting Playwright to work correctly when the app is deployed. From the error messages and our debugging attempts, we believe that Playwright is not installing its browsers in the Docker image. We are still unable to solve this issue despite extensive Googling. At this juncture, it might be more useful to ask for help from a more experienced developer.
+- Another issue we faced was getting Playwright to work correctly in production. Playwright's default installation would not install its browsers in the Docker image. To fix this, we had to use a custom Docker image that came with chrome preinstalled, and set custom launch options for Playwright to launch chrome from the correct directory. This was one of the hardest problems we faced as the problem was specific to our use case, and there was very little information about it online.
