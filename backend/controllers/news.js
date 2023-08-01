@@ -1,4 +1,5 @@
-const { webkit } = require('playwright')
+const { NODE_ENV } = require('../util/config')
+const { chromium } = require('playwright')
 const router = require('express').Router()
 
 const baseUrl = 'https://news.google.com'
@@ -18,7 +19,12 @@ router.get('/:symbols', async (req, res) => {
 
     const responseArray = []
     
-    const browser = await webkit.launch({ headless: true })
+    const launchOptions = { headless: true }
+    if (NODE_ENV === 'production') {
+      launchOptions.executablePath = '/usr/bin/chromium-browser'
+    }
+
+    const browser = await chromium.launch(launchOptions)
     const page = await browser.newPage()
     // Navigate to a website 
     await page.goto(`${baseUrl}/search?for=${query}&hl=en-US&gl=US&ceid=US:en`)
